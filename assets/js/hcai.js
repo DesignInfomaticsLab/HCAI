@@ -304,7 +304,7 @@
       date: fmtPeriod(p.start, p.end),
       title: t(p.title),
       desc: t(p.summary),
-      meta: badge + " <span>" + esc(t(p.funder)) + "</span>"
+      meta: badge + ' <span class="index__note">' + esc(t(p.funder)) + "</span>"
     });
   }
 
@@ -315,7 +315,8 @@
       date: fmtDate(a.date),
       title: t(a.title),
       desc: t(a.summary),
-      meta: '<span class="badge">' + esc(cat) + "</span>" + (a.place ? " <span>" + esc(t(a.place)) + "</span>" : "")
+      meta: '<span class="badge">' + esc(cat) + "</span>" +
+            (a.place ? ' <span class="index__note">' + esc(t(a.place)) + "</span>" : "")
     });
   }
 
@@ -560,6 +561,7 @@
   function allEntries() {
     var out = [];
 
+    // badge = 짧은 분류 라벨, note = 지원기관·장소 같은 부가 정보(평문)
     (data.projects.items || []).forEach(function (p) {
       out.push({
         kind: "project",
@@ -567,7 +569,8 @@
         date: fmtPeriod(p.start, p.end),
         title: t(p.title),
         desc: t(p.summary),
-        meta: t(p.funder),
+        badge: t(p.status === "completed" ? UI.completed : UI.ongoing),
+        note: t(p.funder),
         tags: (p.tags || []).join(" "),
         href: "entry.html?type=project&id=" + encodeURIComponent(p.id)
       });
@@ -580,7 +583,8 @@
         date: fmtDate(a.date),
         title: t(a.title),
         desc: t(a.summary),
-        meta: catLabel(a.category) + (a.place ? " · " + t(a.place) : ""),
+        badge: catLabel(a.category),
+        note: t(a.place),
         tags: a.category,
         href: "entry.html?type=activity&id=" + encodeURIComponent(a.id)
       });
@@ -593,7 +597,8 @@
         date: p.year || "",
         title: t(p.title),
         desc: [p.authors, p.venue].filter(Boolean).join(" · "),
-        meta: pubTypeLabel(p.type),
+        badge: pubTypeLabel(p.type),
+        note: "",
         tags: p.type,
         href: p.url || p.doi || ""
       });
@@ -612,7 +617,8 @@
     var shown = entries.filter(function (e) {
       if (f !== "all" && e.kind !== f) return false;
       if (!q) return true;
-      return (e.title + " " + e.desc + " " + e.meta + " " + e.tags + " " + e.date).toLowerCase().indexOf(q) > -1;
+      return (e.title + " " + e.desc + " " + e.badge + " " + e.note + " " + e.tags + " " + e.date)
+        .toLowerCase().indexOf(q) > -1;
     });
 
     var kinds = [
@@ -650,7 +656,8 @@
                 date: e.date,
                 title: e.title,
                 desc: e.desc,
-                meta: '<span class="badge' + (e.kind === "publication" ? " badge--done" : "") + '">' + esc(e.meta) + "</span>"
+                meta: '<span class="badge' + (e.kind === "publication" ? " badge--done" : "") + '">' + esc(e.badge) + "</span>" +
+                      (e.note ? ' <span class="index__note">' + esc(e.note) + "</span>" : "")
               });
             }).join("") +
           "</div>" +

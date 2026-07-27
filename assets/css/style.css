@@ -18,6 +18,7 @@
    12. Filters & chips
    13. Footer
    14. Utilities & motion
+   15. 한글 라벨 보정
    ========================================================================= */
 
 
@@ -64,7 +65,7 @@
   --max-w:      1560px;
   --header-h:   64px;
 
-  --sec-y:      clamp(4.5rem, 9vw, 9rem);
+  --sec-y:      clamp(3.25rem, 5.5vw, 6rem);
   --radius:     2px;
 
   --ease:       cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -141,8 +142,11 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 
 .section { padding-block: var(--sec-y); }
-.section--tight { padding-block: clamp(3rem, 5vw, 5rem); }
+.section--tight { padding-block: clamp(2.25rem, 4vw, 3.5rem); }
 .section + .section { border-top: 1px solid var(--line); }
+
+/* 페이지 제목 바로 아래 섹션은 위 여백을 줄여 붕 뜨지 않게 */
+.pagehead + .section { padding-top: clamp(2rem, 3.5vw, 3rem); }
 
 .rule { height: 1px; background: var(--line); border: 0; margin: 0; }
 
@@ -408,7 +412,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   font-size: var(--fs-sm);
   color: var(--fg-mid);
   padding-top: 0.15em;
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem;
 }
+.index__note { color: var(--fg-dim); font-size: var(--fs-xs); line-height: 1.5; }
 
 .index__arrow {
   justify-self: end;
@@ -713,6 +719,39 @@ input.chip { outline-offset: 2px; }
   }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* 15. 한글 라벨 보정 =====================================================
+   작은 라벨류는 기본적으로 모노스페이스 + 넓은 자간(0.16em)을 씁니다.
+   영문에서는 '기록물' 느낌을 주지만, 한글에는 모노 글리프가 없어 대체 폰트로
+   떨어지면서 자간만 남아 글자가 흩어져 보입니다.
+   그래서 KO 모드에서는 해당 라벨만 Pretendard + 보통 자간으로 되돌립니다.
+
+   ※ 아래 요소들은 KO 모드에서도 모노를 유지합니다 (내용이 영문/숫자이므로):
+      .brand__mark · .eyebrow · .sechead__title small · .index__date
+      .tag · .langtoggle
+   ---------------------------------------------------------------------- */
+
+html:lang(ko) .hero__eyebrow,
+html:lang(ko) .hero__meta,
+html:lang(ko) .sechead__aside,
+html:lang(ko) .badge,
+html:lang(ko) .chip,
+html:lang(ko) .backlink,
+html:lang(ko) .person__role,
+html:lang(ko) .rolelist__label,
+html:lang(ko) .detail__fact dt,
+html:lang(ko) .footer__col h4,
+html:lang(ko) .footer__bottom,
+html:lang(ko) .pager span,
+html:lang(ko) .prose figcaption,
+html:lang(ko) .empty {
+  font-family: var(--font-sans);
+  letter-spacing: 0.005em;
+  text-transform: none;
+}
+
+/* 숫자 카운터는 계속 모노로 — 자릿수가 흔들리지 않습니다 */
+html:lang(ko) .hero__meta b { font-family: var(--font-mono); letter-spacing: -0.01em; }
 
 /* 인쇄 */
 @media print {
