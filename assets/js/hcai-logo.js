@@ -60,6 +60,23 @@
 
   var DOT_COLOR = { r: 255, g: 255, b: 255, a: 0.85, opVar: 0.35, opMin: 0.15 };
 
+  /* 작은 크기용 프리셋 ------------------------------------------------------
+     모든 파라미터는 캔버스 크기에 비례해 함께 줄어듭니다. 그래서 헤더처럼
+     작은 자리에 v2 설정을 그대로 쓰면 점이 1px 미만이 되어 글자가 뭉개집니다.
+     같은 면적에 '더 적고 굵은 점'을 놓아야 작은 크기에서도 HCAI 로 읽힙니다.
+     ---------------------------------------------------------------------- */
+  var COMPACT = {
+    config: { dotSize: 9.5, spacing: 30, sizeVariance: 3.5, opacityVar: 0.1, falloff: 0.12, dotAlpha: 1 },
+    neural: { lineMaxDist: 17, lineWidth: 2.2, lineMaxCount: 3, glowIntensity: 0.02, pulseWavelength: 150 }
+  };
+
+  function assign(base, extra) {
+    var out = {}, k;
+    for (k in base) if (Object.prototype.hasOwnProperty.call(base, k)) out[k] = base[k];
+    if (extra) for (k in extra) if (Object.prototype.hasOwnProperty.call(extra, k)) out[k] = extra[k];
+    return out;
+  }
+
   var BASE_SCALE = 3;   // 모든 파라미터의 기준 스케일
   var PAD_BASE = 40;    // BASE_SCALE 기준 여백(px) — 가장자리 입자가 잘리지 않게
   var VIEW_W = 233.53, VIEW_H = 77.36;
@@ -111,6 +128,16 @@
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.interactive = opts.interactive !== false;
+    // static: 한 번만 그리고 멈춥니다 (스크롤 내내 붙어 있는 헤더 로고용)
+    this.isStatic = !!opts.static;
+    if (this.isStatic) this.interactive = false;
+
+    // compact: 작은 자리용 프리셋. config / neural 로 개별 항목만 덮어쓸 수도 있습니다.
+    var preset = opts.compact ? COMPACT : { config: null, neural: null };
+    this.cfg = assign(assign(CONFIG, preset.config), opts.config);
+    this.nrl = assign(assign(NEURAL, preset.neural), opts.neural);
+    // 캔버스가 배경 레이어라 pointer-events 를 받지 못할 때, 마우스를 추적할 다른 요소
+    this.pointerTarget = opts.pointerTarget || canvas;
     this.maxDpr = opts.maxDpr || 2;
 
     this.mask = null;
@@ -126,7 +153,8 @@
     this.pointer = null;          // {x, y, strength}
     this.pulseTime = 0;
 
-    this.seq = buildStepSequence();
+    // 간격을 덮어쓴 인스턴스(compact 등)는 그 값으로 고정합니다
+    this.seq = (this.cfg.spacing === CONFIG.spacing) ? buildStepSequence() : [this.cfg.spacing];
     this.stepIndex = 0;
     this.stepElapsed = 0;
 
@@ -151,7 +179,15 @@
       URL.revokeObjectURL(url);
       self.resize();
 
-      if (reducedMotion()) { self.renderStatic(); return; }
+      if (self.isStatic || reducedMotion()) {
+        self.renderStatic();
+        var rt = null;
+        window.addEventListener("resize", function () {
+          clearTimeout(rt);
+          rt = setTimeout(function () { self.resize(); self.renderStatic(); }, 160);
+        });
+        return;
+      }
 
       // 화면에 보일 때만 돌립니다
       if ("IntersectionObserver" in window) {
@@ -183,19 +219,21 @@
   };
 
   Logo.prototype._bindPointer = function () {
-    var self = this, c = this.canvas;
+    var self = this, c = this.canvas, target = this.pointerTarget;
 
-    c.addEventListener("pointermove", function (ev) {
+    // 좌표는 항상 캔버스 기준으로 환산합니다. 커서가 캔버스 밖에 있어도
+    // 캔버스 좌표계 바깥의 소스가 되어 방향성 있는 파동을 만듭니다.
+    target.addEventListener("pointermove", function (ev) {
       var r = c.getBoundingClientRect();
-      var sx = c.width / r.width, sy = c.height / r.height;
+      if (!r.width || !r.height) return;
       self.pointer = {
-        x: (ev.clientX - r.left) * sx,
-        y: (ev.clientY - r.top) * sy,
+        x: (ev.clientX - r.left) * (c.width / r.width),
+        y: (ev.clientY - r.top) * (c.height / r.height),
         strength: 1
       };
     });
 
-    c.addEventListener("pointerleave", function () { self.pointer = null; });
+    target.addEventListener("pointerleave", function () { self.pointer = null; });
   };
 
   /* --- 크기 / 지오메트리 -------------------------------------------------- */
@@ -234,7 +272,7 @@
     var rng = seededRandom(777);
     var w = this.canvas.width, h = this.canvas.height;
     this.sources = [];
-    for (var i = 0; i < NEURAL.pulseSources; i++) {
+    for (var i = 0; i < this.nrl.pulseSources; i++) {
       this.sources.push({
         x: rng() * w, y: rng() * h,
         phase: rng() * Math.PI * 2,
@@ -254,13 +292,13 @@
   };
 
   Logo.prototype._falloffAt = function (x, y, cx, cy) {
-    if (CONFIG.falloff <= 0) return 1;
+    if (this.cfg.falloff <= 0) return 1;
     var w = this.canvas.width, h = this.canvas.height;
-    var maxDist = Math.sqrt(w * w + h * h) * 0.5 * CONFIG.falloffRadius;
+    var maxDist = Math.sqrt(w * w + h * h) * 0.5 * this.cfg.falloffRadius;
     var dx = x - cx, dy = y - cy;
     var t = Math.min(Math.sqrt(dx * dx + dy * dy) / maxDist, 1);
-    var factor = Math.pow(1 - t, CONFIG.falloff);
-    return CONFIG.falloffMin + (1 - CONFIG.falloffMin) * factor;
+    var factor = Math.pow(1 - t, this.cfg.falloff);
+    return this.cfg.falloffMin + (1 - this.cfg.falloffMin) * factor;
   };
 
   /** 도트 + 연결선을 계산해 캐시합니다. 간격이 바뀔 때만 다시 돕니다. */
@@ -270,7 +308,7 @@
     this.geomKey = key;
 
     var s = this._sr();
-    var sp = spacing * s, ds = CONFIG.dotSize * s, sv = CONFIG.sizeVariance * s;
+    var sp = spacing * s, ds = this.cfg.dotSize * s, sv = this.cfg.sizeVariance * s;
     var cx = this.pad + this.logoW * C_CENTER_X_RATIO;
     var cy = this.pad + this.logoH * C_CENTER_Y_RATIO;
     var w = this.canvas.width, h = this.canvas.height;
@@ -289,7 +327,7 @@
         var df = this._falloffAt(x, y, cx, cy);
         var size = (ds * 0.8 * a + (rng() - 0.5) * sv * 0.5) * df;
         if (size <= 0.15) continue;
-        var base = Math.max(0.1, 1 - rng() * CONFIG.opacityVar) * a * df;
+        var base = Math.max(0.1, 1 - rng() * this.cfg.opacityVar) * a * df;
         var variation = DOT_COLOR.opVar > 0 ? rng() * DOT_COLOR.opVar : 0;
         dots.push({ x: x, y: y, size: size, opacity: Math.max(DOT_COLOR.opMin, base * (1 - variation)) });
       }
@@ -297,7 +335,7 @@
 
     this.dots = dots;
     this.pulses = new Float32Array(dots.length);
-    this.lines = NEURAL.linesEnabled ? this._buildLines(dots, NEURAL.lineMaxDist * s) : [];
+    this.lines = this.nrl.linesEnabled ? this._buildLines(dots, this.nrl.lineMaxDist * s) : [];
   };
 
   Logo.prototype._buildLines = function (dots, maxDist) {
@@ -327,7 +365,7 @@
         }
       }
       near.sort(function (a, b) { return a.dist - b.dist; });
-      var count = Math.min(near.length, NEURAL.lineMaxCount);
+      var count = Math.min(near.length, this.nrl.lineMaxCount);
       for (var n = 0; n < count; n++) {
         lines.push({ a: i, b: near[n].j, f: 1 - near[n].dist / maxDist });
       }
@@ -339,7 +377,7 @@
 
   Logo.prototype._computePulses = function () {
     var dots = this.dots, out = this.pulses;
-    if (!NEURAL.pulseEnabled) { for (var z = 0; z < out.length; z++) out[z] = 0; return; }
+    if (!this.nrl.pulseEnabled) { for (var z = 0; z < out.length; z++) out[z] = 0; return; }
 
     var srcs = this.sources.slice();
     if (this.pointer && this.pointer.strength > 0.01) {
@@ -347,7 +385,7 @@
       srcs.push({ x: this.pointer.x, y: this.pointer.y, phase: 0, speed: 1.6, gain: this.pointer.strength });
     }
 
-    var wl = NEURAL.pulseWavelength * this._sr();
+    var wl = this.nrl.pulseWavelength * this._sr();
     var t = this.pulseTime, n = srcs.length, denom = this.sources.length || 1;
 
     for (var i = 0; i < dots.length; i++) {
@@ -356,8 +394,8 @@
         var src = srcs[s];
         var dx = dots[i].x - src.x, dy = dots[i].y - src.y;
         var dist = Math.sqrt(dx * dx + dy * dy);
-        var wave = Math.sin((dist / wl) * Math.PI * 2 - t * src.speed * NEURAL.pulseSpeed + src.phase);
-        if (wave > 0) val += wave * NEURAL.pulseIntensity * (src.gain === undefined ? 1 : src.gain);
+        var wave = Math.sin((dist / wl) * Math.PI * 2 - t * src.speed * this.nrl.pulseSpeed + src.phase);
+        if (wave > 0) val += wave * this.nrl.pulseIntensity * (src.gain === undefined ? 1 : src.gain);
       }
       out[i] = Math.min(val / denom, 1);
     }
@@ -368,18 +406,18 @@
   Logo.prototype._draw = function () {
     var ctx = this.ctx, dots = this.dots, p = this.pulses;
     var r = DOT_COLOR.r, g = DOT_COLOR.g, b = DOT_COLOR.b;
-    var ga = CONFIG.dotAlpha;
+    var ga = this.cfg.dotAlpha;
     var i;
 
     // 배경은 칠하지 않습니다 — 페이지 배경이 그대로 보이도록
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     // 1. 페더 글로우 (점 뒤)
-    if (NEURAL.featherEnabled) {
+    if (this.nrl.featherEnabled) {
       for (i = 0; i < dots.length; i++) {
         var d = dots[i];
-        var glowR = d.size * NEURAL.glowRadius;
-        var intensity = NEURAL.glowIntensity * (1 + p[i] * 1.5);
+        var glowR = d.size * this.nrl.glowRadius;
+        var intensity = this.nrl.glowIntensity * (1 + p[i] * 1.5);
         var alpha = d.opacity * intensity * ga;
         if (alpha < 0.005) continue;
         var grad = ctx.createRadialGradient(d.x, d.y, d.size * 0.5, d.x, d.y, glowR);
@@ -394,12 +432,12 @@
     }
 
     // 2. 신경망 연결선 (점 뒤)
-    ctx.lineWidth = NEURAL.lineWidth * this._sr();
+    ctx.lineWidth = this.nrl.lineWidth * this._sr();
     for (i = 0; i < this.lines.length; i++) {
       var ln = this.lines[i];
       var d1 = dots[ln.a], d2 = dots[ln.b];
       var boost = 1 + (p[ln.a] + p[ln.b]) * 0.5;
-      var la = NEURAL.lineOpacity * ln.f * d1.opacity * d2.opacity * boost * ga;
+      var la = this.nrl.lineOpacity * ln.f * d1.opacity * d2.opacity * boost * ga;
       if (la < 0.005) continue;
       ctx.strokeStyle = "rgba(" + r + "," + g + "," + b + "," + la.toFixed(3) + ")";
       ctx.beginPath();
@@ -409,7 +447,7 @@
     }
 
     // 3. 점 (펄스에 따라 밝기·크기 증폭)
-    ctx.fillStyle = CONFIG.dotColor;
+    ctx.fillStyle = this.cfg.dotColor;
     for (i = 0; i < dots.length; i++) {
       var dd = dots[i], pv = p[i];
       ctx.globalAlpha = Math.min(1, dd.opacity * (1 + pv * 0.8)) * ga;

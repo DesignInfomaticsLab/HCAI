@@ -181,13 +181,25 @@
 
   /* ---------- 공통 셸: 헤더 / 푸터 --------------------------------------- */
 
-  function logoSvg(cls) {
-    // hcai-logo.js 가 들고 있는 워드마크를 그대로 인라인 — currentColor 로 색이 따라옵니다
-    var svg = (window.HCAILogo && window.HCAILogo.SVG) || "";
-    if (!svg) return '<span class="brand__mark">HCAI</span>';
-    return svg
-      .replace("<svg ", '<svg class="' + cls + '" role="img" aria-label="HCAI" fill="currentColor" ')
-      .replace("<g>", '<g fill="currentColor">');
+  /* --- 도트 로고 마운트 -------------------------------------------------
+     헤더 · 푸터 · 히어로 모두 같은 도트 렌더러를 씁니다. 성격만 다릅니다.
+       헤더  — 스크롤 내내 붙어 있으므로 정지 렌더 (움직이면 산만합니다)
+       푸터  — 애니메이션. 페이지 맨 아래라 화면에 들어올 때만 돕니다
+       히어로 — 애니메이션 + 마우스 인터랙션
+     ---------------------------------------------------------------------- */
+
+  var logos = {};
+
+  function logoSlot(cls, id) {
+    if (!window.HCAILogo) return '<span class="brand__mark">HCAI</span>';
+    return '<span class="' + cls + '"><canvas id="' + id + '"></canvas></span>';
+  }
+
+  function mountLogo(key, id, opts) {
+    var canvas = el("#" + id);
+    if (!canvas || !window.HCAILogo) return;
+    if (logos[key] && logos[key].stop) logos[key].stop();
+    logos[key] = window.HCAILogo.mount(canvas, opts);
   }
 
   function renderHeader() {
@@ -211,7 +223,7 @@
       '<a class="skip-link" href="#main">' + esc(t(UI.skip)) + "</a>" +
       '<div class="wrap header__inner">' +
         '<a class="brand" href="index.html" aria-label="' + esc(t(site.name)) + '">' +
-          logoSvg("brand__logo") +
+          logoSlot("brand__logo", "brand-logo") +
           '<span class="brand__name">' + esc(t(site.name)) + "</span>" +
         "</a>" +
         '<button class="navtoggle" type="button" aria-expanded="false" aria-controls="site-nav">' +
@@ -220,6 +232,8 @@
           '<div class="langtoggle" role="group" aria-label="Language">' + langHtml + "</div>" +
         "</nav>" +
       "</div>";
+
+    mountLogo("brand", "brand-logo", { static: true, compact: true });
 
     els("[data-lang]", host).forEach(function (btn) {
       btn.addEventListener("click", function () { setLang(btn.getAttribute("data-lang")); });
@@ -261,7 +275,7 @@
       '<div class="wrap">' +
         '<div class="footer__grid">' +
           "<div>" +
-            logoSvg("footer__logo") +
+            logoSlot("footer__logo", "footer-logo") +
             '<p class="footer__title">' + esc(t(site.name)) + "</p>" +
             '<p class="footer__note">' + esc(t(site.footerNote)) + "</p>" +
           "</div>" +
@@ -280,6 +294,8 @@
           "<span>" + esc(t(site.university)) + "</span>" +
         "</div>" +
       "</div>";
+
+    mountLogo("footer", "footer-logo", { interactive: false, compact: true });
   }
 
   function setLang(next) {
@@ -553,28 +569,25 @@
 
   function renderHome() {
     var site = data.site;
+    var hero = el("#hero");
 
-    el("#hero").innerHTML =
+    // 제목의 반대쪽 언어 표기 — 원래 Cargo 타이틀 블록도 국문/영문을 함께 세웠습니다
+    var alt = lang === "ko" ? (site.hero.title.en || "") : (site.hero.title.ko || "");
+
+    hero.innerHTML =
+      // 로고는 배경 레이어. 마스크로 글자 쪽만 흐려지고 오른쪽은 또렷하게 남습니다.
+      '<div class="hero__bg" aria-hidden="true"><canvas id="hero-logo"></canvas></div>' +
       '<div class="wrap hero__inner">' +
-        '<div class="hero__logo">' +
-          '<canvas id="hero-logo" aria-label="HCAI" role="img"></canvas>' +
-        "</div>" +
         '<p class="hero__eyebrow">' + esc(t(site.hero.eyebrow)) + "</p>" +
         '<h1 class="hero__title">' + esc(t(site.hero.title)) + "</h1>" +
+        (alt ? '<p class="hero__alt">' + esc(alt) + "</p>" : "") +
         '<p class="hero__sub">' + esc(t(site.hero.sub)) + "</p>" +
       "</div>";
 
-    mountHeroLogo();
-    renderArchive();
-  }
+    // 캔버스가 배경이라 클릭을 받지 못하므로, 히어로 영역 전체에서 마우스를 추적합니다
+    mountLogo("hero", "hero-logo", { interactive: true, pointerTarget: hero });
 
-  var heroLogo = null;
-  function mountHeroLogo() {
-    var canvas = el("#hero-logo");
-    if (!canvas || !window.HCAILogo) return;
-    // 언어 전환으로 히어로를 다시 그리면 캔버스도 새로 생기므로 매번 붙입니다
-    if (heroLogo) heroLogo.stop();
-    heroLogo = window.HCAILogo.mount(canvas, { interactive: true });
+    renderArchive();
   }
 
   /* ---------- 페이지: 소개 ----------------------------------------------- */

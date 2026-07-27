@@ -179,14 +179,18 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .brand { display: flex; align-items: center; gap: 0.75rem; margin-right: auto; color: var(--fg); }
 
-/* 헤더 워드마크 — 모든 페이지에 공통으로 들어갑니다.
-   인라인 SVG라 aspect-ratio 를 명시해야 폭이 안정적으로 잡힙니다. */
+/* 헤더 워드마크 — 도트 로고를 정지 상태로 그립니다 (모든 페이지 공통).
+   캔버스에는 입자가 잘리지 않도록 여백이 포함되어 있어 비율이 약 2.5:1 입니다.
+   폭 기준으로 크기를 정하면 JS가 캔버스를 잡기 전에도 자리가 흔들리지 않습니다. */
 .brand__logo {
-  height: 20px; width: auto; display: block;
-  aspect-ratio: 233.53 / 77.36;
+  display: block; width: 104px; flex: none;
   transition: opacity var(--dur) var(--ease);
 }
-.brand:hover .brand__logo { opacity: 0.72; }
+.brand__logo canvas {
+  width: 100%; height: auto; display: block;
+  aspect-ratio: 260.2 / 104.03;
+}
+.brand:hover .brand__logo { opacity: 0.7; }
 
 .brand__mark {
   font-family: var(--font-mono);
@@ -267,40 +271,55 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 /* 5. Hero ================================================================ */
 
+/* 히어로는 3겹으로 쌓입니다.
+     맨 아래 — 격자 (왼쪽 아래로 몰아 둠, 글자를 받쳐 주는 바닥)
+     가운데 — 도트 로고 (오른쪽에서 화면 밖으로 흘러나가는 배경 레이어)
+     맨 위   — 텍스트
+   로고와 글자가 겹치는 구간은 로고 쪽을 마스크로 지워 가독성을 지킵니다. */
+
 .hero {
   position: relative;
-  padding-block: clamp(4rem, 12vh, 9rem) clamp(3rem, 7vh, 5.5rem);
+  display: flex;
+  align-items: center;
+  min-height: clamp(30rem, 76vh, 50rem);
+  padding-block: clamp(3.5rem, 9vh, 6rem);
   border-bottom: 1px solid var(--line);
   overflow: hidden;
+  cursor: crosshair;   /* 화면 어디서든 마우스가 로고에 파동을 만듭니다 */
 }
 
-/* 배경의 아주 미세한 격자 — 아카이브/설계도 느낌 */
+/* 배경 격자 — 로고가 오른쪽을 차지하므로 왼쪽 아래로 비켜 둡니다 */
 .hero::before {
   content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background-image:
     linear-gradient(to right,  var(--line) 1px, transparent 1px),
     linear-gradient(to bottom, var(--line) 1px, transparent 1px);
   background-size: 96px 96px;
-  mask-image: radial-gradient(120% 90% at 70% 0%, #000 0%, transparent 72%);
-  -webkit-mask-image: radial-gradient(120% 90% at 70% 0%, #000 0%, transparent 72%);
-  opacity: 0.7;
+  mask-image: radial-gradient(78% 70% at 0% 104%, #000 0%, transparent 62%);
+  -webkit-mask-image: radial-gradient(78% 70% at 0% 104%, #000 0%, transparent 62%);
+  opacity: 0.45;
 }
 
-.hero > .wrap { position: relative; z-index: 1; }
-
-.hero__inner { display: flex; flex-direction: column; align-items: flex-start; }
-
-/* 도트 로고 캔버스. 비율(≈2.5:1)은 JS가 계산한 캔버스 크기가 결정하고,
-   여기서는 최대 폭과 마우스 커서만 정합니다. */
-.hero__logo {
-  width: 100%;
-  max-width: min(100%, 860px);
-  margin-bottom: clamp(1.75rem, 4vw, 3rem);
+/* 도트 로고 배경 레이어 */
+.hero__bg {
+  position: absolute; z-index: 0;
+  top: 50%; right: 0;
+  width: min(70%, 58rem);
+  transform: translateY(-50%);
+  pointer-events: none;
+  /* 글자가 놓이는 왼쪽은 지우고, 오른쪽으로 갈수록 또렷하게 */
+  --hero-mask: linear-gradient(96deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.10) 20%,
+    rgba(0, 0, 0, 0.55) 40%,
+    rgba(0, 0, 0, 0.92) 58%,
+    #000 74%);
+  mask-image: var(--hero-mask);
+  -webkit-mask-image: var(--hero-mask);
 }
-.hero__logo canvas {
-  width: 100%; height: auto; display: block;
-  cursor: crosshair;
-}
+.hero__bg canvas { width: 100%; height: auto; display: block; aspect-ratio: 260.2 / 104.03; }
+
+.hero__inner { position: relative; z-index: 1; }
 
 .hero__eyebrow {
   font-family: var(--font-mono);
@@ -308,21 +327,47 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--fg-dim);
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .hero__title {
-  font-size: var(--fs-h1);
+  font-size: clamp(2.25rem, 4.9vw, 4.25rem);
   font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 1.1;
+  letter-spacing: -0.04em;
+  line-height: 1.06;
+  max-width: 15ch;
+}
+
+.hero__alt {
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.02em;
+  color: var(--fg-dim);
 }
 
 .hero__sub {
-  margin-top: clamp(1.5rem, 2.5vw, 2rem);
-  max-width: 52ch;
-  font-size: clamp(1rem, 1.2vw, 1.125rem);
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  max-width: 42ch;
+  font-size: clamp(1rem, 1.15vw, 1.125rem);
   color: var(--fg-mid);
+}
+
+/* 좁은 화면에서는 겹칠 자리가 없으므로 로고를 제목 위로 올려 세웁니다 */
+@media (max-width: 900px) {
+  .hero {
+    display: block;
+    min-height: 0;
+    padding-block: clamp(2rem, 6vw, 3rem) clamp(3rem, 9vw, 4.5rem);
+  }
+  .hero__bg {
+    position: relative; top: auto; right: auto; transform: none;
+    width: 100%;
+    padding-inline: var(--pad-x);
+    margin-bottom: clamp(2rem, 6vw, 3rem);
+    mask-image: none; -webkit-mask-image: none;
+  }
+  .hero__title { max-width: none; }
 }
 
 
@@ -746,10 +791,12 @@ input.chip { outline-offset: 2px; }
   grid-template-columns: minmax(0, 2fr) repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
   gap: clamp(2rem, 4vw, 4rem);
 }
-.footer__logo {
-  height: 24px; width: auto; display: block;
-  aspect-ratio: 233.53 / 77.36;
-  color: var(--fg-dim); margin-bottom: 1.25rem;
+/* 푸터 로고 — 화면에 들어올 때만 움직입니다 (IntersectionObserver) */
+.footer__logo { display: block; width: 148px; margin-bottom: 1.5rem; }
+.footer__logo canvas {
+  width: 100%; height: auto; display: block;
+  aspect-ratio: 260.2 / 104.03;
+  opacity: 0.75;
 }
 .footer__title { font-size: var(--fs-h3); font-weight: 500; letter-spacing: -0.025em; max-width: 18ch; }
 .footer__note { margin-top: 1rem; font-size: var(--fs-sm); color: var(--fg-dim); max-width: 40ch; }
