@@ -1,0 +1,29 @@
+{
+  "_comment": "논문 · 특허 · 수상 성과 아카이브. 새 항목은 items 배열 맨 위에 추가하세요(최신순). type 은 아래 types 의 id 중 하나입니다. project 에 projects.json 의 id 를 적으면 해당 프로젝트 성과로 연결됩니다.",
+
+  "types": [
+    { "id": "journal",    "label": { "ko": "학술지 논문", "en": "Journal" } },
+    { "id": "conference", "label": { "ko": "학술대회",   "en": "Conference" } },
+    { "id": "patent",     "label": { "ko": "특허",       "en": "Patent" } },
+    { "id": "award",      "label": { "ko": "수상",       "en": "Award" } },
+    { "id": "book",       "label": { "ko": "저서",       "en": "Book" } }
+  ],
+
+  "items": [
+    {
+      "id": "example-publication-2025",
+      "type": "conference",
+      "year": "2025",
+      "authors": "Hong, G., Hyun, K.",
+      "title": {
+        "ko": "예시 항목 — 실제 성과가 나오면 이 항목을 지우고 채워 넣으세요",
+        "en": "Example entry — replace this once a real publication is added"
+      },
+      "venue": "Proceedings of Example Conference",
+      "project": "designer-centered-ai-design-pipeline",
+      "doi": "",
+      "url": "",
+      "note": { "ko": "", "en": "" }
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "_comment": "구성원. 새 연구원을 추가하려면 members 배열 맨 뒤에 항목을 하나 복사해 붙여넣고 내용을 바꾸세요. group 값은 아래 groups 의 id 중 하나여야 합니다. 졸업하면 group 을 'alumni' 로만 바꾸면 자동으로 졸업생 섹션으로 이동합니다.",
+  "_photoNote": "사진은 assets/img/people/ 에 넣고 photo 에 경로를 적으세요. 정사각형(예: 800x800) 권장. 비워두면 이니셜 이미지가 자동 생성됩니다.",
+
+  "groups": [
+    { "id": "director", "label": { "ko": "연구소장",   "en": "Director" } },
+    { "id": "faculty",  "label": { "ko": "참여교수",   "en": "Faculty" } },
+    { "id": "member",   "label": { "ko": "연구원",     "en": "Researchers" } },
+    { "id": "advisor",  "label": { "ko": "자문위원",   "en": "Advisory Board" } },
+    { "id": "alumni",   "label": { "ko": "졸업생",     "en": "Alumni" } }
+  ],
+
+  "members": [
+    {
+      "id": "hyun-kyunghoon",
+      "group": "director",
+      "name": { "ko": "현경훈", "en": "Kyunghoon Hyun" },
+      "role": { "ko": "교수 · 연구소장", "en": "Professor · Director" },
+      "affiliation": { "ko": "한양대학교 실내건축디자인학과\n디자인 인포매틱스 연구실", "en": "Dept. of Interior Architecture Design, Hanyang University\nDesign Informatics Lab" },
+      "email": "hoonhello@hanyang.ac.kr",
+      "keywords": ["Design Informatics", "Generative Design", "Human-AI Collaboration"],
+      "photo": "",
+      "links": [{ "label": "Web", "url": "https://www.hanyang.ac.kr/" }],
+      "since": "2025"
+    },
+    {
+      "id": "lee-seungwon",
+      "group": "member",
+      "name": { "ko": "이승원", "en": "Seungwon Lee" },
+      "role": { "ko": "박사과정", "en": "Ph.D. Student" },
+      "affiliation": { "ko": "한양대학교 실내건축디자인학과", "en": "Dept. of Interior Architecture Design, Hanyang University" },
+      "email": "",
+      "keywords": [],
+      "photo": "",
+      "links": [],
+      "since": "2025"
+    },
+    {
+      "id": "cho-taehee",
+      "group": "member",
+      "name": { "ko": "조태희", "en": "Taehee Cho" },
+      "role": { "ko": "박사과정", "en": "Ph.D. Student" },
+      "affiliation": { "ko": "한양대학교 실내건축디자인학과", "en": "Dept. of Interior Architecture Design, Hanyang University" },
+      "email": "",
+      "keywords": [],
+      "photo": "",
+      "links": [],
+      "since": "2025"
+    },
+    {
+      "id": "jin-semin",
+      "group": "member",
+      "name": { "ko": "진세민", "en": "Semin Jin" },
+      "role": { "ko": "박사과정", "en": "Ph.D. Student" },
+      "affiliation": { "ko": "한양대학교 실내건축디자인학과", "en": "Dept. of Interior Architecture Design, Hanyang University" },
+      "email": "",
+      "keywords": [],
+      "photo": "",
+      "links": [],
+      "since": "2025"
+    },
+    {
+      "id": "choi-jiin",
+      "group": "member",
+      "name": { "ko": "최지인", "en": "Jiin Choi" },
+      "role": { "ko": "박사과정", "en": "Ph.D. Student" },
+      "affiliation": { "ko": "한양대학교 실내건축디자인학과", "en": "Dept. of Interior Architecture Design, Hanyang University" },
+      "email": "",
+      "keywords": [],
+      "photo": "",
+      "links": [],
+      "since": "2025"
+    },
+    {
+      "id": "jang-yukyung",
+      "group": "member",
+      "name": { "ko": "장유경", "en": "Yukyung Jang" },
+      "role": { "ko": "석사과정", "en": "M.S. Student" },
+      "affiliation": { "ko": "한양대학교 실내건축디자인학과", "en": "Dept. of Interior Architecture Design, Hanyang University" },
+      "email": "",
+      "keywords": [],
+      "photo": "",
+      "links": [],
+      "since": "2025"
+    },
+    {
+      "id": "yoon-yejin",
+      "group": "member",
+      "name": { "ko": "윤예진", "en": "Yejin Yoon" },
+      "role": { "ko": "석사과정", "en": "M.S. Student" },
+      "affiliation": { "ko": "한양대학교 실내건축디자인학과", "en": "Dept. of Interior Architecture Design, Hanyang University" },
+      "email": "",
+      "keywords": [],
+      "photo": "",
+      "links": [],
+      "since": "2025"
+    },
+    {
+      "id": "kim-donghyuk",
+      "group": "member",
+      "name": { "ko": "김동혁", "en": "Donghyuk Kim" },
+      "role": { "ko": "석사과정", "en": "M.S. Student" },
+      "affiliation": { "ko": "한양대학교 실내건축디자인학과", "en": "Dept. of Interior Architecture Design, Hanyang University" },
+      "email": "",
+      "keywords": [],
+      "photo": "",
+      "links": [],
+      "since": "2025"
+    },
+    {
+      "id": "park-jungmin",
+      "group": "member",
+      "name": { "ko": "박정민", "en": "Jungmin Park" },
+      "role": { "ko": "학사과정", "en": "Undergraduate Researcher" },
+      "affiliation": { "ko": "한양대학교 실내건축디자인학과", "en": "Dept. of Interior Architecture Design, Hanyang University" },
+      "email": "",
+      "keywords": [],
+      "photo": "",
+      "links": [],
+      "since": "2025"
+    },
+    {
+      "id": "sung-minhyuk",
+      "group": "advisor",
+      "name": { "ko": "성민혁", "en": "Minhyuk Sung" },
+      "role": { "ko": "교수", "en": "Professor" },
+      "affiliation": { "ko": "한국과학기술원(KAIST) 전산학부", "en": "School of Computing, KAIST" },
+      "email": "",
+      "keywords": [],
+      "photo": "",
+      "links": [{ "label": "Web", "url": "https://mhsung.github.io/" }],
+      "since": "2025"
+    },
+    {
+      "id": "ban-sunghoon",
+      "group": "advisor",
+      "name": { "ko": "반성훈", "en": "Sunghoon Ban" },
+      "role": { "ko": "대표", "en": "CEO" },
+      "affiliation": { "ko": "주식회사 리콘랩스", "en": "RECON Labs Inc." },
+      "email": "",
+      "keywords": [],
+      "photo": "",
+      "links": [{ "label": "Web", "url": "https://reconlabs.ai/" }],
+      "since": "2025"
+    },
+    {
+      "id": "roger-blanco",
+      "group": "advisor",
+      "name": { "ko": "Roger Blanco", "en": "Roger Blanco" },
+      "role": { "ko": "", "en": "" },
+      "affiliation": { "ko": "NVIDIA", "en": "NVIDIA" },
+      "email": "",
+      "keywords": [],
+      "photo": "",
+      "links": [{ "label": "Web", "url": "https://www.nvidia.com/" }],
+      "since": "2025"
+    }
+  ]
+}

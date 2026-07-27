@@ -1,0 +1,74 @@
+{
+  "_comment": "센터 소개 페이지 본문. body 는 '줄 배열'입니다. 각 줄 앞에 기호를 붙여 서식을 지정합니다: '## 소제목', '- 목록', '> 강조박스', '![캡션](이미지경로)'. 아무 기호도 없으면 일반 문단.",
+
+  "intro": {
+    "ko": [
+      "최근 인공지능(AI) 기술의 비약적인 발전은 디자인 분야 전반에 걸쳐 큰 변화를 일으키고 있습니다. 특히 생성형 AI, 사용자 행동 예측 모델 등 다양한 기술이 디자인 과정에 활용되며, 효율성과 창의성 모두에서 새로운 가능성을 제시하고 있습니다.",
+      "공간 경험(Spatial Experience), 사용자 경험(UX), 인터페이스 디자인(UI), 제품 디자인 등 다양한 디자인 분야에서 AI의 활용 가능성을 탐색하고, 이를 실제 사례에 적용하는 실증적 연구가 요구됩니다.",
+      "> 그러나 이러한 변화 속에서도 디자인의 핵심은 인간-중심에 있다는 점을 간과할 수 없습니다.",
+      "디자인은 본질적으로 인간의 요구, 경험, 감성에 기반해야 하며, AI 기술 역시 이러한 가치를 보조하는 방향으로 발전해야 합니다. 인간 중심의 가치가 AI 기술 개발에 통합되도록 하는 중개자적 역할이 필요한 시점입니다. 디자이너와 AI 기술자 간의 협업 프레임워크를 구축하고, 이를 통해 융합형 인재를 양성할 수 있는 기반이 절실합니다.",
+      "**한양대학교 인간-중심 AI디자인 연구센터**는 이러한 문제의식에 기반하여, AI 기술을 인간의 창의성과 감성, 직관을 보완하는 도구로서 활용하고자 설립되었습니다. 본 센터는 디자인 프로세스에서 인간의 인풋과 판단이 어떻게 AI와 조화를 이루며 더 나은 결과를 만들어낼 수 있는지를 탐구하고, 이를 통해 보다 혁신적이고 직관적인 디자인 환경을 조성하는 것을 목표로 합니다."
+    ],
+    "en": [
+      "Recent advances in artificial intelligence are reshaping the field of design. Generative AI and user-behavior prediction models are entering the design process, opening new possibilities in both efficiency and creativity.",
+      "Across spatial experience, UX, interface design, and product design, there is a growing need for empirical research that explores where AI can be applied — and tests it against real cases.",
+      "> Yet through all of this change, the core of design remains human-centered.",
+      "Design is fundamentally grounded in human needs, experience, and sensibility, and AI should develop in a direction that supports those values. What is needed now is a mediating role that embeds human-centered values into AI development — a collaboration framework between designers and AI engineers, and the training ground it creates.",
+      "**The Human-Centered AI Design Institute at Hanyang University** was founded on this premise: to use AI as a tool that complements human creativity, sensibility, and intuition. We investigate how human input and judgment can work in concert with AI to produce better outcomes, and through that, build a more innovative and intuitive design environment."
+    ]
+  },
+
+  "scope": [
+    {
+      "no": "01",
+      "title": { "ko": "AI 기반 디자인 도구 개발", "en": "AI-Based Design Tools" },
+      "subtitle": { "ko": "창의성과 감성을 보조하는 기술", "en": "Technology that supports creativity and sensibility" },
+      "items": {
+        "ko": [
+          "생성형 AI, 사용자 행동 예측 모델 등 최신 기술을 디자이너의 창의적 활동을 지원하는 도구(tool)로 활용",
+          "인간의 감성, 직관, 경험 기반 판단을 AI에 통합하여 보완적 협업 가능성 탐색",
+          "공간 경험, UX/UI, 제품 디자인 등 다양한 분야에서 AI-지원 디자인 워크플로우 실증 연구 진행"
+        ],
+        "en": [
+          "Applying generative AI and user-behavior prediction models as tools that support designers' creative work",
+          "Integrating human sensibility, intuition, and experience-based judgment into AI for complementary collaboration",
+          "Empirical studies of AI-assisted design workflows across spatial experience, UX/UI, and product design"
+        ]
+      }
+    },
+    {
+      "no": "02",
+      "title": { "ko": "인간-중심 AI 기술 설계", "en": "Human-Centered AI Design Principles" },
+      "subtitle": { "ko": "설계 원칙을 기술 개발에 반영", "en": "Embedding design principles into technology" },
+      "items": {
+        "ko": [
+          "디자인의 핵심 가치인 인간의 경험과 요구, 감성 중심성을 기술 개발에 반영",
+          "인간-컴퓨터 상호작용(HCI) 관점에서 직관적이고 신뢰 가능한 인터페이스 설계",
+          "사용자 중심 데이터를 활용한 맞춤형 디자인 알고리즘 개발"
+        ],
+        "en": [
+          "Embedding human experience, needs, and sensibility — design's core values — into technical development",
+          "Designing intuitive, trustworthy interfaces from a human-computer interaction (HCI) perspective",
+          "Developing personalized design algorithms driven by user-centered data"
+        ]
+      }
+    },
+    {
+      "no": "03",
+      "title": { "ko": "디자이너-AI 협업 프레임워크 구축", "en": "Designer–AI Collaboration Framework" },
+      "subtitle": { "ko": "융합형 인재 양성과 산학 협력", "en": "Interdisciplinary training and industry collaboration" },
+      "items": {
+        "ko": [
+          "디자이너와 AI 개발자 간 효율적인 협업 구조 및 커뮤니케이션 모델 제안",
+          "디자인 사고와 AI 기술 역량을 동시에 갖춘 융합형 인재 양성 커리큘럼 개발",
+          "산학 협력을 통한 실제 디자인 문제 해결 사례 기반의 실습 중심 연구 및 교육 추진"
+        ],
+        "en": [
+          "Proposing effective collaboration structures and communication models between designers and AI developers",
+          "Developing curricula that cultivate both design thinking and AI competency",
+          "Practice-based research and education grounded in real design problems, through industry partnership"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>인간-중심 AI디자인 연구센터</title>
+<meta name="description" content="인간-중심 AI디자인 연구센터의 개별 기록.">
+
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+<header class="header" id="site-header"></header>
+
+<!--
+  개별 상세 페이지는 이 한 장을 재사용합니다.
+    연구 프로젝트 → entry.html?type=project&id=<projects.json 의 id>
+    활동 · 뉴스   → entry.html?type=activity&id=<activities.json 의 id>
+-->
+<main id="main"><div id="entry"></div></main>
+
+<footer class="footer" id="site-footer"></footer>
+
+<script src="assets/js/hcai.js" defer></script>
+<script>window.addEventListener("DOMContentLoaded", function () { HCAI.init({ page: "entry" }); });</script>
+</body>
+</html>

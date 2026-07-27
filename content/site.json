@@ -1,0 +1,61 @@
+{
+  "_comment": "사이트 전역 설정. 이름, 연락처, 네비게이션, 홈 히어로 문구를 여기서 바꿉니다.",
+
+  "name": {
+    "ko": "인간-중심 AI디자인 연구센터",
+    "en": "Human-Centered AI Design Institute"
+  },
+  "shortName": {
+    "ko": "HCAI",
+    "en": "HCAI"
+  },
+  "university": {
+    "ko": "한양대학교",
+    "en": "Hanyang University"
+  },
+  "description": {
+    "ko": "한양대학교 인간-중심 AI디자인 연구센터는 AI 기술을 인간의 창의성과 감성, 직관을 보완하는 도구로 활용하기 위한 연구를 수행합니다.",
+    "en": "The Human-Centered AI Design Institute at Hanyang University explores AI as a tool that complements human creativity, sensibility, and intuition in design."
+  },
+
+  "hero": {
+    "eyebrow": {
+      "ko": "한양대학교 인간-중심 AI디자인 연구센터",
+      "en": "Hanyang University · Human-Centered AI Design Institute"
+    },
+    "headline": {
+      "ko": "인간-중심 AI디자인",
+      "en": "Human-Centered<br>AI Design"
+    },
+    "sub": {
+      "ko": "디자인의 핵심은 여전히 인간에 있습니다. 우리는 AI가 인간의 창의성과 감성, 직관을 대체하지 않고 확장하는 방법을 연구합니다.",
+      "en": "The core of design remains human. We study how AI can extend — not replace — human creativity, sensibility, and intuition."
+    }
+  },
+
+  "nav": [
+    { "href": "about.html",      "label": { "ko": "센터 소개",  "en": "About" } },
+    { "href": "research.html",   "label": { "ko": "연구",      "en": "Research" } },
+    { "href": "activities.html", "label": { "ko": "활동·뉴스", "en": "Activities" } },
+    { "href": "people.html",     "label": { "ko": "구성원",    "en": "People" } },
+    { "href": "archive.html",    "label": { "ko": "아카이브",  "en": "Archive" } }
+  ],
+
+  "contact": {
+    "address": {
+      "ko": "서울시 성동구 왕십리로 222 한양대학교 생활과학관 504-1호",
+      "en": "Rm 504-1, College of Human Ecology, Hanyang University,\n222 Wangsimni-ro, Seongdong-gu, Seoul, Republic of Korea"
+    },
+    "phone": "02-2220-1189",
+    "email": "hoonhello@hanyang.ac.kr"
+  },
+
+  "links": [
+    { "label": "Hanyang University", "url": "https://www.hanyang.ac.kr/" }
+  ],
+
+  "footerNote": {
+    "ko": "본 연구센터는 한양대학교 실내건축디자인학과 디자인 인포매틱스 연구실을 기반으로 운영됩니다.",
+    "en": "Operated out of the Design Informatics Lab, Dept. of Interior Architecture Design, Hanyang University."
+  }
+}

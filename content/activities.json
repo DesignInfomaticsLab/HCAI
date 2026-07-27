@@ -1,0 +1,76 @@
+{
+  "_comment": "활동 · 뉴스 아카이브. 새 항목은 items 배열 맨 위에 추가하세요(최신순). category 는 아래 categories 의 id 중 하나입니다.",
+  "_bodyNote": "body 는 '줄 배열'입니다. '## 소제목' / '- 목록' / '> 강조' / '![캡션](이미지경로)' 로 서식을 지정합니다.",
+
+  "categories": [
+    { "id": "news",     "label": { "ko": "뉴스",     "en": "News" } },
+    { "id": "seminar",  "label": { "ko": "세미나",   "en": "Seminar" } },
+    { "id": "workshop", "label": { "ko": "워크샵",   "en": "Workshop" } },
+    { "id": "talk",     "label": { "ko": "강연",     "en": "Talk" } },
+    { "id": "award",    "label": { "ko": "수상",     "en": "Award" } },
+    { "id": "outreach", "label": { "ko": "대외협력", "en": "Outreach" } }
+  ],
+
+  "items": [
+    {
+      "id": "2025-11-sig-computational-design-workshop",
+      "category": "seminar",
+      "date": "2025-11",
+      "title": {
+        "ko": "제2회 SIG 컴퓨테이셔널 디자인 워크샵",
+        "en": "2nd SIG Computational Design Workshop"
+      },
+      "place": {
+        "ko": "한양대학교 생활과학관",
+        "en": "College of Human Ecology, Hanyang University"
+      },
+      "cover": "",
+      "summary": {
+        "ko": "컴퓨테이셔널 디자인 분야의 연구자와 실무자가 모여 최신 연구 동향과 실무 적용 사례를 공유하는 제2회 SIG 워크샵을 개최합니다.",
+        "en": "The second SIG workshop brings together researchers and practitioners in computational design to share recent research and applied case studies."
+      },
+      "body": {
+        "ko": [
+          "컴퓨테이셔널 디자인 분야의 연구자와 실무자가 모여 최신 연구 동향과 실무 적용 사례를 공유합니다.",
+          "> 상세 프로그램은 확정 후 업데이트될 예정입니다."
+        ],
+        "en": [
+          "Researchers and practitioners in computational design gather to share recent research directions and applied case studies.",
+          "> The detailed program will be updated once confirmed."
+        ]
+      },
+      "gallery": [],
+      "links": []
+    },
+    {
+      "id": "2025-08-01-institute-launch",
+      "category": "news",
+      "date": "2025-08-01",
+      "title": {
+        "ko": "인간-중심 AI디자인 연구센터 개소",
+        "en": "Human-Centered AI Design Institute Opens"
+      },
+      "place": {
+        "ko": "한양대학교",
+        "en": "Hanyang University"
+      },
+      "cover": "",
+      "summary": {
+        "ko": "한양대학교는 인공지능 기술이 인간의 창의적 의사결정에 긍정적으로 기여할 수 있도록 연구하는 인간-중심 AI디자인 연구센터를 새롭게 개소하였습니다.",
+        "en": "Hanyang University has launched the Human-Centered AI Design Institute, dedicated to research on how AI can positively contribute to human creative decision-making."
+      },
+      "body": {
+        "ko": [
+          "한양대학교는 인공지능 기술이 인간의 창의적 의사결정에 긍정적으로 기여할 수 있도록 연구하는 인간-중심 AI디자인 연구센터를 새롭게 개소하였습니다.",
+          "앞으로 본 센터는 기술과 인간의 조화를 추구하는 다양한 융합 연구와 실증을 추진할 예정입니다."
+        ],
+        "en": [
+          "Hanyang University has newly established the Human-Centered AI Design Institute, which researches how artificial intelligence can positively contribute to human creative decision-making.",
+          "Going forward, the Institute will pursue interdisciplinary research and empirical studies that seek harmony between technology and people."
+        ]
+      },
+      "gallery": [],
+      "links": []
+    }
+  ]
+}
