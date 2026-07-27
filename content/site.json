@@ -1,45 +1,43 @@
 {
-  "_comment": "사이트 전역 설정. 이름, 연락처, 네비게이션, 홈 히어로 문구를 여기서 바꿉니다.",
+  "_comment": "사이트 전역 설정. 이름, 연락처, 네비게이션, 첫 화면 문구, 메인 아카이브 노출 개수를 여기서 바꿉니다.",
+  "_copyNote": "ko 문구는 기존 Cargo 홈페이지의 원문을 그대로 옮긴 것입니다. 임의로 고쳐 쓰지 마세요. en 은 번역 초안이라 검수가 필요합니다.",
 
   "name": {
     "ko": "인간-중심 AI디자인 연구센터",
     "en": "Human-Centered AI Design Institute"
   },
-  "shortName": {
-    "ko": "HCAI",
-    "en": "HCAI"
-  },
-  "university": {
-    "ko": "한양대학교",
-    "en": "Hanyang University"
-  },
+  "shortName": { "ko": "HCAI", "en": "HCAI" },
+  "university": { "ko": "한양대학교", "en": "Hanyang University" },
+
   "description": {
-    "ko": "한양대학교 인간-중심 AI디자인 연구센터는 AI 기술을 인간의 창의성과 감성, 직관을 보완하는 도구로 활용하기 위한 연구를 수행합니다.",
-    "en": "The Human-Centered AI Design Institute at Hanyang University explores AI as a tool that complements human creativity, sensibility, and intuition in design."
+    "ko": "한양대학교 인간-중심 AI 디자인 연구센터는 AI 기술을 인간의 창의성과 감성, 직관을 보완하는 도구로서 활용하고자 설립되었습니다.",
+    "en": "The Human-Centered AI Design Institute at Hanyang University was founded to use AI as a tool that complements human creativity, sensibility, and intuition."
   },
 
   "hero": {
-    "eyebrow": {
-      "ko": "한양대학교 인간-중심 AI디자인 연구센터",
-      "en": "Hanyang University · Human-Centered AI Design Institute"
-    },
-    "headline": {
-      "ko": "인간-중심 AI디자인",
-      "en": "Human-Centered<br>AI Design"
+    "eyebrow": { "ko": "한양대학교", "en": "Hanyang University" },
+    "title": {
+      "ko": "인간-중심 AI디자인 연구센터",
+      "en": "Human-Centered AI Design Institute"
     },
     "sub": {
-      "ko": "디자인의 핵심은 여전히 인간에 있습니다. 우리는 AI가 인간의 창의성과 감성, 직관을 대체하지 않고 확장하는 방법을 연구합니다.",
-      "en": "The core of design remains human. We study how AI can extend — not replace — human creativity, sensibility, and intuition."
+      "ko": "본 센터는 디자인 프로세스에서 인간의 인풋과 판단이 어떻게 AI와 조화를 이루며 더 나은 결과를 만들어낼 수 있는지를 탐구하고, 이를 통해 보다 혁신적이고 직관적인 디자인 환경을 조성하는 것을 목표로 합니다.",
+      "en": "We investigate how human input and judgment can work in concert with AI to produce better outcomes, and through that, build a more innovative and intuitive design environment."
     }
   },
 
   "nav": [
-    { "href": "about.html",      "label": { "ko": "센터 소개",  "en": "About" } },
-    { "href": "research.html",   "label": { "ko": "연구",      "en": "Research" } },
-    { "href": "activities.html", "label": { "ko": "활동·뉴스", "en": "Activities" } },
-    { "href": "people.html",     "label": { "ko": "구성원",    "en": "People" } },
-    { "href": "archive.html",    "label": { "ko": "아카이브",  "en": "Archive" } }
+    { "href": "about.html",            "label": { "ko": "센터 소개",  "en": "About" } },
+    { "href": "index.html#research",   "label": { "ko": "연구",      "en": "Research" } },
+    { "href": "index.html#activities", "label": { "ko": "활동·뉴스", "en": "Activities" } },
+    { "href": "people.html",           "label": { "ko": "구성원",    "en": "People" } }
   ],
+
+  "home": {
+    "_comment": "메인 페이지 아카이브에 처음 보여 줄 항목 수. 이보다 많아지면 오래된 항목은 접히고 '더 보기'로 펼칩니다. 삭제되는 것은 아닙니다.",
+    "archiveLimit": 24,
+    "loadMoreStep": 24
+  },
 
   "contact": {
     "address": {
@@ -55,7 +53,7 @@
   ],
 
   "footerNote": {
-    "ko": "본 연구센터는 한양대학교 실내건축디자인학과 디자인 인포매틱스 연구실을 기반으로 운영됩니다.",
-    "en": "Operated out of the Design Informatics Lab, Dept. of Interior Architecture Design, Hanyang University."
+    "ko": "AI 기술을 인간의 창의성과 감성, 직관을 보완하는 도구로서 활용하고자 설립되었습니다.",
+    "en": "Founded to use AI as a tool that complements human creativity, sensibility, and intuition."
   }
 }

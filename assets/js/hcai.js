@@ -2,6 +2,12 @@
    HCAI — site runtime
    빌드 도구 없이 동작합니다. content/*.json 을 읽어 화면을 그립니다.
    페이지에서 HCAI.init({ page: 'home' }) 형태로 호출합니다.
+
+   페이지 구성
+     home   — 로고 히어로 + 통합 아카이브(연도별, 필터·검색·더보기)
+     about  — 센터 소개
+     people — 구성원
+     entry  — 개별 기록 상세 (?type=project|activity&id=…)
    ========================================================================= */
 
 (function () {
@@ -18,53 +24,51 @@
     return (navigator.language || "ko").toLowerCase().indexOf("ko") === 0 ? "ko" : "en";
   })();
 
-  var data = {};      // 로드된 JSON 캐시
-  var pageName = "";  // 현재 페이지 이름
+  var data = {};
+  var pageName = "";
 
   /* ---------- UI 문자열 -------------------------------------------------- */
 
   var UI = {
-    skip:          { ko: "본문으로 건너뛰기", en: "Skip to content" },
-    menu:          { ko: "메뉴", en: "Menu" },
-    close:         { ko: "닫기", en: "Close" },
-    all:           { ko: "전체", en: "All" },
-    ongoing:       { ko: "진행중", en: "Ongoing" },
-    completed:     { ko: "종료", en: "Completed" },
-    research:      { ko: "연구 프로젝트", en: "Research Projects" },
-    activities:    { ko: "활동 및 뉴스", en: "Activities & News" },
-    people:        { ko: "구성원", en: "People" },
-    publications:  { ko: "연구 성과", en: "Publications" },
-    archive:       { ko: "아카이브", en: "Archive" },
-    sitemap:       { ko: "바로가기", en: "Sitemap" },
-    viewAll:       { ko: "전체 보기", en: "View all" },
-    empty:         { ko: "아직 등록된 항목이 없습니다", en: "Nothing here yet" },
-    notFound:      { ko: "요청한 항목을 찾을 수 없습니다", en: "The requested entry was not found" },
-    contact:       { ko: "연락처", en: "Contact" },
-    links:         { ko: "링크", en: "Links" },
-    address:       { ko: "주소", en: "Address" },
-    backTo:        { ko: "목록으로", en: "Back to index" },
-    prev:          { ko: "이전", en: "Previous" },
-    next:          { ko: "다음", en: "Next" },
-    period:        { ko: "연구 기간", en: "Period" },
-    funder:        { ko: "지원 기관", en: "Funded by" },
-    kind:          { ko: "구분", en: "Type" },
-    status:        { ko: "상태", en: "Status" },
-    date:          { ko: "일자", en: "Date" },
-    place:         { ko: "장소", en: "Venue" },
-    category:      { ko: "분류", en: "Category" },
-    topics:        { ko: "주제", en: "Topics" },
-    related:       { ko: "관련 성과", en: "Related output" },
-    searchPh:      { ko: "제목 · 키워드 · 연도로 검색", en: "Search by title, keyword, or year" },
-    resultCount:   { ko: "건", en: "entries" },
-    loading:       { ko: "불러오는 중…", en: "Loading…" },
-    projectCount:  { ko: "연구 프로젝트", en: "Research projects" },
-    memberCount:   { ko: "구성원", en: "Members" },
-    since:         { ko: "설립", en: "Established" }
+    skip:         { ko: "본문으로 건너뛰기", en: "Skip to content" },
+    menu:         { ko: "메뉴", en: "Menu" },
+    close:        { ko: "닫기", en: "Close" },
+    all:          { ko: "전체", en: "All" },
+    ongoing:      { ko: "진행중", en: "Ongoing" },
+    completed:    { ko: "종료", en: "Completed" },
+    research:     { ko: "연구 프로젝트", en: "Research" },
+    activities:   { ko: "활동·뉴스", en: "Activities" },
+    people:       { ko: "구성원", en: "People" },
+    publications: { ko: "연구 성과", en: "Publications" },
+    archive:      { ko: "기록", en: "Archive" },
+    sitemap:      { ko: "바로가기", en: "Sitemap" },
+    empty:        { ko: "아직 등록된 항목이 없습니다", en: "Nothing here yet" },
+    noResult:     { ko: "검색 결과가 없습니다", en: "No matching entries" },
+    notFound:     { ko: "요청한 항목을 찾을 수 없습니다", en: "The requested entry was not found" },
+    contact:      { ko: "연락처", en: "Contact" },
+    links:        { ko: "링크", en: "Links" },
+    address:      { ko: "주소", en: "Address" },
+    backTo:       { ko: "목록으로", en: "Back to index" },
+    prev:         { ko: "이전", en: "Previous" },
+    next:         { ko: "다음", en: "Next" },
+    period:       { ko: "연구 기간", en: "Period" },
+    funder:       { ko: "지원 기관", en: "Funded by" },
+    kind:         { ko: "구분", en: "Type" },
+    status:       { ko: "상태", en: "Status" },
+    date:         { ko: "일자", en: "Date" },
+    place:        { ko: "장소", en: "Venue" },
+    category:     { ko: "분류", en: "Category" },
+    topics:       { ko: "주제", en: "Topics" },
+    related:      { ko: "관련 성과", en: "Related output" },
+    searchPh:     { ko: "제목 · 키워드 · 연도로 검색", en: "Search by title, keyword, or year" },
+    resultCount:  { ko: "건", en: "entries" },
+    loadMore:     { ko: "더 보기", en: "Show more" },
+    showingOf:    { ko: "중", en: "of" },
+    viewFull:     { ko: "원본 이미지 열기", en: "Open full image" }
   };
 
   /* ---------- 유틸 ------------------------------------------------------- */
 
-  /** 다국어 값에서 현재 언어 문자열을 꺼냅니다. 문자열이면 그대로 반환. */
   function t(v) {
     if (v === null || v === undefined) return "";
     if (typeof v === "string") return v;
@@ -72,7 +76,6 @@
     return v[lang] || v.ko || v.en || "";
   }
 
-  /** 다국어 배열(줄 배열)에서 현재 언어 배열을 꺼냅니다. */
   function tArr(v) {
     if (!v) return [];
     if (Array.isArray(v)) return v;
@@ -89,10 +92,8 @@
   function el(sel, root) { return (root || document).querySelector(sel); }
   function els(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
 
-  /** "2025-08-01" → "2025.08.01" / "2025-04" → "2025.04" */
   function fmtDate(s) { return s ? String(s).replace(/-/g, ".") : ""; }
 
-  /** 시작–종료 기간 문자열 */
   function fmtPeriod(start, end) {
     if (!start && !end) return "";
     if (!end) return fmtDate(start) + " –";
@@ -102,24 +103,21 @@
 
   function year(s) { return s ? String(s).slice(0, 4) : ""; }
 
-  /** 인물 사진이 없을 때 쓸 이니셜 */
   function initials(name) {
-    var ko = (name && name.ko) || "";
-    var en = (name && name.en) || "";
+    var ko = (name && name.ko) || "", en = (name && name.en) || "";
     if (/[가-힣]/.test(ko)) return ko.length > 2 ? ko.slice(1) : ko;
-    var parts = (en || ko).trim().split(/\s+/);
-    return parts.map(function (p) { return p.charAt(0); }).join("").slice(0, 2).toUpperCase();
+    return (en || ko).trim().split(/\s+/)
+      .map(function (p) { return p.charAt(0); }).join("").slice(0, 2).toUpperCase();
   }
 
-  /* ---------- 미니 마크다운 --------------------------------------------
-     줄 배열을 HTML 로 변환합니다. 지원 문법:
-       '## 제목'            → <h3>
-       '- 항목'             → <ul><li>
-       '> 인용'             → <blockquote>
-       '![캡션](경로)'      → <figure><img><figcaption>
-       그 외                → <p>
-     인라인: **굵게**, [링크](주소)
-     -------------------------------------------------------------------- */
+  /** 최신순 정렬. JSON 안의 순서가 뒤죽박죽이어도 화면은 항상 최신순입니다. */
+  function byNewest(key) {
+    return function (a, b) { return String(b[key] || "").localeCompare(String(a[key] || "")); };
+  }
+
+  /* ---------- 미니 마크다운 ----------------------------------------------
+     '## 제목' / '- 항목' / '> 인용' / '![캡션](경로)' / **굵게** / [링크](주소)
+     ---------------------------------------------------------------------- */
 
   function inline(s) {
     return esc(s)
@@ -131,9 +129,7 @@
   function renderBody(lines) {
     var out = [], list = null;
 
-    function flush() {
-      if (list) { out.push("<ul>" + list.join("") + "</ul>"); list = null; }
-    }
+    function flush() { if (list) { out.push("<ul>" + list.join("") + "</ul>"); list = null; } }
 
     tArr(lines).forEach(function (raw) {
       var line = String(raw == null ? "" : raw).trim();
@@ -142,8 +138,11 @@
       var img = line.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
       if (img) {
         flush();
+        // 이미지는 원본을 새 탭에서 열 수 있게 링크로 감쌉니다
         out.push(
-          '<figure><img src="' + esc(img[2]) + '" alt="' + esc(img[1]) + '" loading="lazy">' +
+          '<figure><a href="' + esc(img[2]) + '" target="_blank" rel="noopener noreferrer" ' +
+          'title="' + esc(t(UI.viewFull)) + '">' +
+          '<img src="' + esc(img[2]) + '" alt="' + esc(img[1]) + '" loading="lazy"></a>' +
           (img[1] ? "<figcaption>" + inline(img[1]) + "</figcaption>" : "") +
           "</figure>"
         );
@@ -172,23 +171,37 @@
           return r.json();
         })
         .then(function (j) { data[n] = j; return j; });
-    }));
+    })).then(function () {
+      // 화면에 쓰기 전에 한 번만 최신순으로 정렬해 둡니다
+      if (data.projects && data.projects.items) data.projects.items.sort(byNewest("start"));
+      if (data.activities && data.activities.items) data.activities.items.sort(byNewest("date"));
+      if (data.publications && data.publications.items) data.publications.items.sort(byNewest("year"));
+    });
   }
 
   /* ---------- 공통 셸: 헤더 / 푸터 --------------------------------------- */
+
+  function logoSvg(cls) {
+    // hcai-logo.js 가 들고 있는 워드마크를 그대로 인라인 — currentColor 로 색이 따라옵니다
+    var svg = (window.HCAILogo && window.HCAILogo.SVG) || "";
+    if (!svg) return '<span class="brand__mark">HCAI</span>';
+    return svg
+      .replace("<svg ", '<svg class="' + cls + '" role="img" aria-label="HCAI" fill="currentColor" ')
+      .replace("<g>", '<g fill="currentColor">');
+  }
 
   function renderHeader() {
     var site = data.site;
     var here = (location.pathname.split("/").pop() || "index.html");
 
     var navHtml = site.nav.map(function (item) {
-      var current = item.href === here ? ' aria-current="page"' : "";
+      var file = item.href.split("#")[0] || "index.html";
+      var current = (file === here && item.href.indexOf("#") < 0) ? ' aria-current="page"' : "";
       return '<a class="nav__link" href="' + esc(item.href) + '"' + current + '>' + esc(t(item.label)) + "</a>";
     }).join("");
 
     var langHtml = LANGS.map(function (L) {
-      return '<button type="button" data-lang="' + L + '" aria-pressed="' + (L === lang) + '">' +
-             L.toUpperCase() + "</button>";
+      return '<button type="button" data-lang="' + L + '" aria-pressed="' + (L === lang) + '">' + L.toUpperCase() + "</button>";
     }).join("");
 
     var host = el("#site-header");
@@ -197,26 +210,21 @@
     host.innerHTML =
       '<a class="skip-link" href="#main">' + esc(t(UI.skip)) + "</a>" +
       '<div class="wrap header__inner">' +
-        '<a class="brand" href="index.html">' +
-          '<span class="brand__mark">HCAI</span>' +
+        '<a class="brand" href="index.html" aria-label="' + esc(t(site.name)) + '">' +
+          logoSvg("brand__logo") +
           '<span class="brand__name">' + esc(t(site.name)) + "</span>" +
         "</a>" +
         '<button class="navtoggle" type="button" aria-expanded="false" aria-controls="site-nav">' +
-          "<span>" + esc(t(UI.menu)) + "</span>" +
-        "</button>" +
+          "<span>" + esc(t(UI.menu)) + "</span></button>" +
         '<nav class="nav" id="site-nav" aria-label="Main">' + navHtml +
           '<div class="langtoggle" role="group" aria-label="Language">' + langHtml + "</div>" +
         "</nav>" +
       "</div>";
 
-    // 언어 전환
     els("[data-lang]", host).forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        setLang(btn.getAttribute("data-lang"));
-      });
+      btn.addEventListener("click", function () { setLang(btn.getAttribute("data-lang")); });
     });
 
-    // 모바일 메뉴
     var toggle = el(".navtoggle", host), nav = el("#site-nav", host);
     if (toggle && nav) {
       toggle.addEventListener("click", function () {
@@ -224,6 +232,14 @@
         nav.setAttribute("data-open", String(!open));
         toggle.setAttribute("aria-expanded", String(!open));
         el("span", toggle).textContent = t(open ? UI.menu : UI.close);
+      });
+      // 같은 페이지 안의 앵커를 눌렀을 때 모바일 메뉴를 닫습니다
+      els(".nav__link", nav).forEach(function (a) {
+        a.addEventListener("click", function () {
+          nav.setAttribute("data-open", "false");
+          toggle.setAttribute("aria-expanded", "false");
+          el("span", toggle).textContent = t(UI.menu);
+        });
       });
     }
   }
@@ -234,7 +250,7 @@
     if (!host) return;
 
     var navHtml = site.nav.map(function (item) {
-      return "<li><a href=" + '"' + esc(item.href) + '"' + ">" + esc(t(item.label)) + "</a></li>";
+      return '<li><a href="' + esc(item.href) + '">' + esc(t(item.label)) + "</a></li>";
     }).join("");
 
     var linksHtml = (site.links || []).map(function (l) {
@@ -245,6 +261,7 @@
       '<div class="wrap">' +
         '<div class="footer__grid">' +
           "<div>" +
+            logoSvg("footer__logo") +
             '<p class="footer__title">' + esc(t(site.name)) + "</p>" +
             '<p class="footer__note">' + esc(t(site.footerNote)) + "</p>" +
           "</div>" +
@@ -255,7 +272,7 @@
           "</ul></div>" +
           '<div class="footer__col"><h4>' + esc(t(UI.address)) + "</h4>" +
             "<address>" + esc(t(c.address)) + "</address>" +
-            (linksHtml ? "<ul style=\"margin-top:1rem\">" + linksHtml + "</ul>" : "") +
+            (linksHtml ? '<ul style="margin-top:1rem">' + linksHtml + "</ul>" : "") +
           "</div>" +
         "</div>" +
         '<div class="footer__bottom">' +
@@ -273,9 +290,8 @@
     render();
   }
 
-  /* ---------- 조각(partial) 렌더러 --------------------------------------- */
+  /* ---------- 조각 렌더러 ------------------------------------------------- */
 
-  /** 아카이브 index 행 */
   function rowHtml(o) {
     return (
       '<a class="index__row" href="' + esc(o.href) + '">' +
@@ -290,43 +306,15 @@
     );
   }
 
-  function mediaHtml(src, alt, label) {
-    if (src) return '<img src="' + esc(src) + '" alt="' + esc(alt) + '" loading="lazy">';
-    return '<div class="ph">' + esc(label || "HCAI") + "</div>";
-  }
-
-  function projectRow(p) {
-    var badge = p.status === "completed"
-      ? '<span class="badge badge--done">' + esc(t(UI.completed)) + "</span>"
-      : '<span class="badge">' + esc(t(UI.ongoing)) + "</span>";
-    return rowHtml({
-      href: "entry.html?type=project&id=" + encodeURIComponent(p.id),
-      date: fmtPeriod(p.start, p.end),
-      title: t(p.title),
-      desc: t(p.summary),
-      meta: badge + ' <span class="index__note">' + esc(t(p.funder)) + "</span>"
-    });
-  }
-
-  function activityRow(a) {
-    var cat = catLabel(a.category);
-    return rowHtml({
-      href: "entry.html?type=activity&id=" + encodeURIComponent(a.id),
-      date: fmtDate(a.date),
-      title: t(a.title),
-      desc: t(a.summary),
-      meta: '<span class="badge">' + esc(cat) + "</span>" +
-            (a.place ? ' <span class="index__note">' + esc(t(a.place)) + "</span>" : "")
-    });
-  }
-
   function catLabel(id) {
-    var found = ((data.activities && data.activities.categories) || []).filter(function (c) { return c.id === id; })[0];
+    var found = ((data.activities && data.activities.categories) || [])
+      .filter(function (c) { return c.id === id; })[0];
     return found ? t(found.label) : id;
   }
 
   function pubTypeLabel(id) {
-    var found = ((data.publications && data.publications.types) || []).filter(function (c) { return c.id === id; })[0];
+    var found = ((data.publications && data.publications.types) || [])
+      .filter(function (c) { return c.id === id; })[0];
     return found ? t(found.label) : id;
   }
 
@@ -350,8 +338,7 @@
       '<div class="person' + (lead ? " person--lead" : "") + '">' +
         '<div class="person__photo">' + photo + "</div>" +
         '<div class="stack stack--sm">' +
-          '<p class="person__name">' + esc(t(m.name)) +
-            (other ? "<span>" + esc(other) + "</span>" : "") + "</p>" +
+          '<p class="person__name">' + esc(t(m.name)) + (other ? "<span>" + esc(other) + "</span>" : "") + "</p>" +
           (t(m.role) ? '<p class="person__role">' + esc(t(m.role)) + "</p>" : "") +
           (t(m.affiliation) ? '<p class="person__aff">' + esc(t(m.affiliation)) + "</p>" : "") +
           tags +
@@ -361,207 +348,19 @@
     );
   }
 
-  /* ---------- 페이지: 홈 -------------------------------------------------- */
+  /* ---------- 통합 아카이브 ----------------------------------------------- */
 
-  function renderHome() {
-    var site = data.site;
-    var projects = data.projects.items || [];
-    var acts = (data.activities.items || []);
-    var members = (data.people.members || []);
+  /* 네비게이션 해시 ↔ 필터 값 */
+  var HASH_FILTER = { research: "project", activities: "activity", publications: "publication", archive: "all" };
+  var FILTER_HASH = { project: "research", activity: "activities", publication: "publications", all: "archive" };
 
-    el("#hero").innerHTML =
-      '<div class="wrap">' +
-        '<p class="hero__eyebrow">' + esc(t(site.hero.eyebrow)) + "</p>" +
-        '<h1 class="hero__headline">' + t(site.hero.headline) + "</h1>" +
-        '<p class="hero__sub">' + esc(t(site.hero.sub)) + "</p>" +
-        '<div class="hero__meta">' +
-          "<div><b>" + projects.length + "</b>" + esc(t(UI.projectCount)) + "</div>" +
-          "<div><b>" + acts.length + "</b>" + esc(t(UI.activities)) + "</div>" +
-          "<div><b>" + members.length + "</b>" + esc(t(UI.memberCount)) + "</div>" +
-          "<div><b>2025</b>" + esc(t(UI.since)) + "</div>" +
-        "</div>" +
-      "</div>";
-
-    // 연구
-    el("#home-research").innerHTML =
-      '<div class="wrap">' +
-        '<div class="sechead">' +
-          '<h2 class="sechead__title"><small>Research</small>' + esc(t(UI.research)) + "</h2>" +
-          '<a class="sechead__aside backlink" href="research.html">' + esc(t(UI.viewAll)) + " →</a>" +
-        "</div>" +
-        (projects.length
-          ? '<div class="index">' + projects.slice(0, 4).map(projectRow).join("") + "</div>"
-          : '<p class="empty">' + esc(t(UI.empty)) + "</p>") +
-      "</div>";
-
-    // 활동
-    el("#home-activities").innerHTML =
-      '<div class="wrap">' +
-        '<div class="sechead">' +
-          '<h2 class="sechead__title"><small>Activities</small>' + esc(t(UI.activities)) + "</h2>" +
-          '<a class="sechead__aside backlink" href="activities.html">' + esc(t(UI.viewAll)) + " →</a>" +
-        "</div>" +
-        (acts.length
-          ? '<div class="index">' + acts.slice(0, 5).map(activityRow).join("") + "</div>"
-          : '<p class="empty">' + esc(t(UI.empty)) + "</p>") +
-      "</div>";
-
-    // 구성원 미리보기
-    var preview = members.filter(function (m) { return m.group !== "alumni"; }).slice(0, 6);
-    el("#home-people").innerHTML =
-      '<div class="wrap">' +
-        '<div class="sechead">' +
-          '<h2 class="sechead__title"><small>People</small>' + esc(t(UI.people)) + "</h2>" +
-          '<a class="sechead__aside backlink" href="people.html">' + esc(t(UI.viewAll)) + " →</a>" +
-        "</div>" +
-        '<div class="grid grid--4">' + preview.map(function (m) { return personCard(m); }).join("") + "</div>" +
-      "</div>";
-  }
-
-  /* ---------- 페이지: 소개 ----------------------------------------------- */
-
-  function renderAbout() {
-    var site = data.site, about = data.about, c = site.contact || {};
-
-    el("#about-intro").innerHTML =
-      '<div class="wrap split">' +
-        '<p class="eyebrow">' + (lang === "ko" ? "센터 소개" : "About") + "</p>" +
-        '<div class="prose">' + renderBody(about.intro) + "</div>" +
-      "</div>";
-
-    var scopeHtml = about.scope.map(function (s) {
-      return (
-        '<div class="split" style="padding-block:clamp(2rem,4vw,3.25rem);border-top:1px solid var(--line)">' +
-          "<div>" +
-            '<p class="eyebrow" style="color:var(--accent)">' + esc(s.no) + "</p>" +
-            '<h3 style="font-size:var(--fs-h3);margin-top:.75rem">' + esc(t(s.title)) + "</h3>" +
-            '<p class="dim" style="font-size:var(--fs-sm);margin-top:.5rem">' + esc(t(s.subtitle)) + "</p>" +
-          "</div>" +
-          '<div class="prose" style="max-width:none">' + renderBody(tArr(s.items).map(function (i) { return "- " + i; })) + "</div>" +
-        "</div>"
-      );
-    }).join("");
-
-    el("#about-scope").innerHTML =
-      '<div class="wrap">' +
-        '<div class="sechead"><h2 class="sechead__title"><small>Scope</small>' +
-          (lang === "ko" ? "연구 범위" : "Research Scope") + "</h2></div>" +
-        scopeHtml +
-      "</div>";
-
-    el("#about-contact").innerHTML =
-      '<div class="wrap split">' +
-        '<p class="eyebrow">' + esc(t(UI.contact)) + "</p>" +
-        '<div class="detail__facts" style="margin-top:0">' +
-          '<div class="detail__fact"><dt>' + esc(t(UI.address)) + "</dt><dd style=\"white-space:pre-line\">" + esc(t(c.address)) + "</dd></div>" +
-          '<div class="detail__fact"><dt>Tel</dt><dd>' + esc(c.phone) + "</dd></div>" +
-          '<div class="detail__fact"><dt>Email</dt><dd><a href="mailto:' + esc(c.email) + '" style="border-bottom:1px solid var(--line-strong)">' + esc(c.email) + "</a></dd></div>" +
-        "</div>" +
-      "</div>";
-  }
-
-  /* ---------- 페이지: 연구 ----------------------------------------------- */
-
-  var filterState = { research: "all", activities: "all", archive: "all" };
-
-  function renderResearch() {
-    var items = data.projects.items || [];
-    var f = filterState.research;
-    var shown = f === "all" ? items : items.filter(function (p) { return (p.status || "ongoing") === f; });
-
-    var chips = [
-      { id: "all", label: t(UI.all) },
-      { id: "ongoing", label: t(UI.ongoing) },
-      { id: "completed", label: t(UI.completed) }
-    ].map(function (c) {
-      return '<button class="chip" type="button" data-filter="research" data-value="' + c.id +
-             '" aria-pressed="' + (f === c.id) + '">' + esc(c.label) + "</button>";
-    }).join("");
-
-    el("#research-list").innerHTML =
-      '<div class="wrap">' +
-        '<div class="filters">' + chips + "</div>" +
-        (shown.length
-          ? '<div class="index">' + shown.map(projectRow).join("") + "</div>"
-          : '<p class="empty">' + esc(t(UI.empty)) + "</p>") +
-        '<p class="sechead__aside" style="margin-top:1.5rem">' + shown.length + " " + esc(t(UI.resultCount)) + "</p>" +
-      "</div>";
-
-    bindFilters();
-  }
-
-  /* ---------- 페이지: 활동 ----------------------------------------------- */
-
-  function renderActivities() {
-    var items = data.activities.items || [];
-    var cats = data.activities.categories || [];
-    var f = filterState.activities;
-    var shown = f === "all" ? items : items.filter(function (a) { return a.category === f; });
-
-    var chipDefs = [{ id: "all", label: t(UI.all) }].concat(cats.map(function (c) {
-      return { id: c.id, label: t(c.label) };
-    }));
-
-    var chips = chipDefs.map(function (c) {
-      var n = c.id === "all" ? items.length : items.filter(function (a) { return a.category === c.id; }).length;
-      return '<button class="chip" type="button" data-filter="activities" data-value="' + c.id +
-             '" aria-pressed="' + (f === c.id) + '">' + esc(c.label) + " " + n + "</button>";
-    }).join("");
-
-    el("#activities-list").innerHTML =
-      '<div class="wrap">' +
-        '<div class="filters">' + chips + "</div>" +
-        (shown.length
-          ? '<div class="index">' + shown.map(activityRow).join("") + "</div>"
-          : '<p class="empty">' + esc(t(UI.empty)) + "</p>") +
-        '<p class="sechead__aside" style="margin-top:1.5rem">' + shown.length + " " + esc(t(UI.resultCount)) + "</p>" +
-      "</div>";
-
-    bindFilters();
-  }
-
-  function bindFilters() {
-    els("[data-filter]").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        filterState[btn.getAttribute("data-filter")] = btn.getAttribute("data-value");
-        render();
-      });
-    });
-  }
-
-  /* ---------- 페이지: 구성원 --------------------------------------------- */
-
-  function renderPeople() {
-    var groups = data.people.groups || [];
-    var members = data.people.members || [];
-
-    var html = groups.map(function (g) {
-      var list = members.filter(function (m) { return m.group === g.id; });
-      if (!list.length) return "";
-
-      var isLead = g.id === "director" && list.length === 1;
-      return (
-        '<section class="people__group">' +
-          '<div class="sechead">' +
-            '<h2 class="sechead__title" style="font-size:var(--fs-h3)">' + esc(t(g.label)) + "</h2>" +
-            '<span class="sechead__aside">' + list.length + "</span>" +
-          "</div>" +
-          (isLead
-            ? personCard(list[0], true)
-            : '<div class="grid grid--4">' + list.map(function (m) { return personCard(m); }).join("") + "</div>") +
-        "</section>"
-      );
-    }).join("");
-
-    el("#people-list").innerHTML = '<div class="wrap">' + (html || '<p class="empty">' + esc(t(UI.empty)) + "</p>") + "</div>";
-  }
-
-  /* ---------- 페이지: 통합 아카이브 --------------------------------------- */
+  var archiveFilter = "all";
+  var archiveQuery = "";
+  var archiveShown = 0;   // 현재 펼쳐 놓은 개수
 
   function allEntries() {
     var out = [];
 
-    // badge = 짧은 분류 라벨, note = 지원기관·장소 같은 부가 정보(평문)
     (data.projects.items || []).forEach(function (p) {
       out.push({
         kind: "project",
@@ -607,19 +406,27 @@
     return out.sort(function (a, b) { return String(b.sort).localeCompare(String(a.sort)); });
   }
 
-  var archiveQuery = "";
-
   function renderArchive() {
+    var host = el("#home-archive");
+    if (!host) return;
+
+    var home = data.site.home || {};
+    var limit = home.archiveLimit || 24;
+    var step = home.loadMoreStep || limit;
+
     var entries = allEntries();
-    var f = filterState.archive;
     var q = archiveQuery.trim().toLowerCase();
 
-    var shown = entries.filter(function (e) {
-      if (f !== "all" && e.kind !== f) return false;
+    var matched = entries.filter(function (e) {
+      if (archiveFilter !== "all" && e.kind !== archiveFilter) return false;
       if (!q) return true;
       return (e.title + " " + e.desc + " " + e.badge + " " + e.note + " " + e.tags + " " + e.date)
         .toLowerCase().indexOf(q) > -1;
     });
+
+    if (!archiveShown) archiveShown = limit;
+    var shown = matched.slice(0, archiveShown);
+    var remaining = matched.length - shown.length;
 
     var kinds = [
       { id: "all", label: t(UI.all) },
@@ -630,26 +437,27 @@
 
     var chips = kinds.map(function (c) {
       var n = c.id === "all" ? entries.length : entries.filter(function (e) { return e.kind === c.id; }).length;
-      return '<button class="chip" type="button" data-filter="archive" data-value="' + c.id +
-             '" aria-pressed="' + (f === c.id) + '">' + esc(c.label) + " " + n + "</button>";
+      return '<button class="chip" type="button" data-value="' + c.id +
+             '" aria-pressed="' + (archiveFilter === c.id) + '">' + esc(c.label) + " " + n + "</button>";
     }).join("");
 
     // 연도별 묶음
-    var byYear = {};
+    var byYear = {}, years = [];
     shown.forEach(function (e) {
       var y = year(e.sort) || "—";
-      (byYear[y] = byYear[y] || []).push(e);
+      if (!byYear[y]) { byYear[y] = []; years.push(y); }
+      byYear[y].push(e);
     });
-    var years = Object.keys(byYear).sort().reverse();
+    years.sort().reverse();
 
     var listHtml = years.map(function (y) {
       return (
-        '<section style="margin-top:clamp(2rem,4vw,3.5rem)">' +
-          '<div class="sechead" style="margin-bottom:0;border-bottom-color:var(--line)">' +
-            '<h2 class="sechead__title" style="font-family:var(--font-mono);font-size:1.25rem;letter-spacing:.08em">' + esc(y) + "</h2>" +
-            '<span class="sechead__aside">' + byYear[y].length + "</span>" +
+        '<section class="yeargroup">' +
+          '<div class="yeargroup__head">' +
+            '<h3 class="yeargroup__year">' + esc(y) + "</h3>" +
+            '<span class="yeargroup__count">' + byYear[y].length + "</span>" +
           "</div>" +
-          '<div class="index" style="border-top:0">' +
+          '<div class="index">' +
             byYear[y].map(function (e) {
               return rowHtml({
                 href: e.href || "#",
@@ -665,22 +473,55 @@
       );
     }).join("");
 
-    el("#archive-list").innerHTML =
+    host.innerHTML =
       '<div class="wrap">' +
-        '<div class="filters" style="align-items:center;justify-content:space-between">' +
-          "<div class=\"filters\" style=\"padding-bottom:0\">" + chips + "</div>" +
-          '<input id="archive-q" class="chip" type="search" style="min-width:min(100%,22rem);border-radius:999px;background:transparent;color:var(--fg)" ' +
-            'placeholder="' + esc(t(UI.searchPh)) + '" value="' + esc(archiveQuery) + '">' +
+        '<div class="sechead" id="archive">' +
+          '<h2 class="sechead__title"><small>Archive</small>' + esc(t(UI.archive)) + "</h2>" +
+          '<span class="sechead__aside">' + shown.length +
+            (remaining > 0 ? " " + t(UI.showingOf) + " " + matched.length : "") +
+            " " + esc(t(UI.resultCount)) + "</span>" +
         "</div>" +
-        (shown.length ? listHtml : '<p class="empty">' + esc(t(UI.empty)) + "</p>") +
+
+        '<div class="archivebar">' +
+          '<div class="filters">' + chips + "</div>" +
+          '<input id="archive-q" class="chip chip--search" type="search" ' +
+            'placeholder="' + esc(t(UI.searchPh)) + '" value="' + esc(archiveQuery) + '" ' +
+            'aria-label="' + esc(t(UI.searchPh)) + '">' +
+        "</div>" +
+
+        (shown.length ? listHtml : '<p class="empty">' + esc(t(q ? UI.noResult : UI.empty)) + "</p>") +
+
+        (remaining > 0
+          ? '<div class="loadmore"><button type="button" id="archive-more">' +
+              esc(t(UI.loadMore)) + " (+" + Math.min(step, remaining) + ")</button></div>"
+          : "") +
       "</div>";
 
-    bindFilters();
+    // 필터 칩
+    els("[data-value]", host).forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        archiveFilter = btn.getAttribute("data-value");
+        archiveShown = 0;
+        setHash(FILTER_HASH[archiveFilter]);
+        renderArchive();
+      });
+    });
 
-    var input = el("#archive-q");
+    // 더 보기
+    var more = el("#archive-more", host);
+    if (more) {
+      more.addEventListener("click", function () {
+        archiveShown += step;
+        renderArchive();
+      });
+    }
+
+    // 검색 (커서 위치 유지)
+    var input = el("#archive-q", host);
     if (input) {
       input.addEventListener("input", function () {
         archiveQuery = input.value;
+        archiveShown = 0;
         var pos = input.selectionStart;
         renderArchive();
         var next = el("#archive-q");
@@ -689,17 +530,133 @@
     }
   }
 
+  function setHash(name) {
+    if (!name || !history.replaceState) return;
+    history.replaceState(null, "", name === "archive" ? location.pathname : location.pathname + "#" + name);
+  }
+
+  function applyHash(scroll) {
+    var h = (location.hash || "").replace("#", "");
+    if (HASH_FILTER[h]) {
+      archiveFilter = HASH_FILTER[h];
+      archiveShown = 0;
+      if (scroll) {
+        var target = el("#archive");
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      return true;
+    }
+    return false;
+  }
+
+  /* ---------- 페이지: 홈 -------------------------------------------------- */
+
+  function renderHome() {
+    var site = data.site;
+
+    el("#hero").innerHTML =
+      '<div class="wrap hero__inner">' +
+        '<div class="hero__logo">' +
+          '<canvas id="hero-logo" aria-label="HCAI" role="img"></canvas>' +
+        "</div>" +
+        '<p class="hero__eyebrow">' + esc(t(site.hero.eyebrow)) + "</p>" +
+        '<h1 class="hero__title">' + esc(t(site.hero.title)) + "</h1>" +
+        '<p class="hero__sub">' + esc(t(site.hero.sub)) + "</p>" +
+      "</div>";
+
+    mountHeroLogo();
+    renderArchive();
+  }
+
+  var heroLogo = null;
+  function mountHeroLogo() {
+    var canvas = el("#hero-logo");
+    if (!canvas || !window.HCAILogo) return;
+    // 언어 전환으로 히어로를 다시 그리면 캔버스도 새로 생기므로 매번 붙입니다
+    if (heroLogo) heroLogo.stop();
+    heroLogo = window.HCAILogo.mount(canvas, { interactive: true });
+  }
+
+  /* ---------- 페이지: 소개 ----------------------------------------------- */
+
+  function renderAbout() {
+    var site = data.site, about = data.about, c = site.contact || {};
+
+    el("#about-intro").innerHTML =
+      '<div class="wrap split">' +
+        '<p class="eyebrow">' + (lang === "ko" ? "센터 소개" : "About") + "</p>" +
+        '<div class="prose">' + renderBody(about.intro) + "</div>" +
+      "</div>";
+
+    var scopeHtml = about.scope.map(function (s) {
+      return (
+        '<div class="split scope__row">' +
+          "<div>" +
+            '<p class="eyebrow scope__no">' + esc(s.no) + "</p>" +
+            '<h3 class="scope__title">' + esc(t(s.title)) + "</h3>" +
+            '<p class="scope__sub">' + esc(t(s.subtitle)) + "</p>" +
+          "</div>" +
+          '<div class="prose prose--wide">' +
+            renderBody(tArr(s.items).map(function (i) { return "- " + i; })) +
+          "</div>" +
+        "</div>"
+      );
+    }).join("");
+
+    el("#about-scope").innerHTML =
+      '<div class="wrap">' +
+        '<div class="sechead"><h2 class="sechead__title"><small>Scope</small>' +
+          (lang === "ko" ? "연구 범위" : "Research Scope") + "</h2></div>" +
+        scopeHtml +
+      "</div>";
+
+    el("#about-contact").innerHTML =
+      '<div class="wrap split">' +
+        '<p class="eyebrow">' + esc(t(UI.contact)) + "</p>" +
+        '<dl class="detail__facts" style="margin-top:0">' +
+          '<div class="detail__fact"><dt>' + esc(t(UI.address)) + '</dt><dd class="pre">' + esc(t(c.address)) + "</dd></div>" +
+          '<div class="detail__fact"><dt>Tel</dt><dd>' + esc(c.phone) + "</dd></div>" +
+          '<div class="detail__fact"><dt>Email</dt><dd><a class="ul" href="mailto:' + esc(c.email) + '">' + esc(c.email) + "</a></dd></div>" +
+        "</dl>" +
+      "</div>";
+  }
+
+  /* ---------- 페이지: 구성원 --------------------------------------------- */
+
+  function renderPeople() {
+    var groups = data.people.groups || [];
+    var members = data.people.members || [];
+
+    var html = groups.map(function (g) {
+      var list = members.filter(function (m) { return m.group === g.id; });
+      if (!list.length) return "";
+      var isLead = g.id === "director" && list.length === 1;
+      return (
+        '<section class="people__group">' +
+          '<div class="sechead">' +
+            '<h2 class="sechead__title sechead__title--sm">' + esc(t(g.label)) + "</h2>" +
+            '<span class="sechead__aside">' + list.length + "</span>" +
+          "</div>" +
+          (isLead
+            ? personCard(list[0], true)
+            : '<div class="grid grid--4">' + list.map(function (m) { return personCard(m); }).join("") + "</div>") +
+        "</section>"
+      );
+    }).join("");
+
+    el("#people-list").innerHTML =
+      '<div class="wrap">' + (html || '<p class="empty">' + esc(t(UI.empty)) + "</p>") + "</div>";
+  }
+
   /* ---------- 페이지: 상세 ----------------------------------------------- */
 
-  function qs(name) {
-    return new URLSearchParams(location.search).get(name) || "";
-  }
+  function qs(name) { return new URLSearchParams(location.search).get(name) || ""; }
 
   function renderEntry() {
     var type = qs("type"), id = qs("id");
     var host = el("#entry");
 
-    var listHref = type === "activity" ? "activities.html" : "research.html";
+    var backHref = type === "activity" ? "index.html#activities" : "index.html#research";
     var items = type === "activity" ? (data.activities.items || []) : (data.projects.items || []);
     var idx = -1;
     items.forEach(function (it, i) { if (it.id === id) idx = i; });
@@ -708,7 +665,7 @@
       host.innerHTML =
         '<div class="wrap section">' +
           '<p class="empty">' + esc(t(UI.notFound)) + "</p>" +
-          '<p style="text-align:center"><a class="backlink" href="' + listHref + '">← ' + esc(t(UI.backTo)) + "</a></p>" +
+          '<p style="text-align:center"><a class="backlink" href="' + backHref + '">← ' + esc(t(UI.backTo)) + "</a></p>" +
         "</div>";
       return;
     }
@@ -733,8 +690,7 @@
     }).join("") + "</dl>";
 
     var tagsHtml = (it.tags || []).length
-      ? '<div class="tags" style="margin-top:2rem">' +
-        it.tags.map(function (k) { return '<span class="tag">' + esc(k) + "</span>"; }).join("") + "</div>"
+      ? '<div class="tags detail__tags">' + it.tags.map(function (k) { return '<span class="tag">' + esc(k) + "</span>"; }).join("") + "</div>"
       : "";
 
     var rolesHtml = (it.roles || []).length
@@ -748,7 +704,10 @@
 
     var galleryHtml = (it.gallery || []).length
       ? '<div class="section--tight"><div class="gallery">' + it.gallery.map(function (g) {
-          return '<img src="' + esc(typeof g === "string" ? g : g.src) + '" alt="' + esc(typeof g === "string" ? "" : t(g.caption)) + '" loading="lazy">';
+          var src = typeof g === "string" ? g : g.src;
+          var cap = typeof g === "string" ? "" : t(g.caption);
+          return '<a href="' + esc(src) + '" target="_blank" rel="noopener noreferrer">' +
+                 '<img src="' + esc(src) + '" alt="' + esc(cap) + '" loading="lazy"></a>';
         }).join("") + "</div></div>"
       : "";
 
@@ -777,18 +736,18 @@
     var pagerHtml =
       '<div class="wrap"><div class="pager">' +
         (prev ? '<a href="entry.html?type=' + esc(type) + "&id=" + encodeURIComponent(prev.id) + '"><span>' + esc(t(UI.prev)) + "</span><b>" + esc(t(prev.title)) + "</b></a>" : "<span></span>") +
-        (next ? '<a style="text-align:right" href="entry.html?type=' + esc(type) + "&id=" + encodeURIComponent(next.id) + '"><span>' + esc(t(UI.next)) + "</span><b>" + esc(t(next.title)) + "</b></a>" : "<span></span>") +
+        (next ? '<a class="pager__next" href="entry.html?type=' + esc(type) + "&id=" + encodeURIComponent(next.id) + '"><span>' + esc(t(UI.next)) + "</span><b>" + esc(t(next.title)) + "</b></a>" : "<span></span>") +
       "</div></div>";
 
     var coverHtml = it.cover
-      ? '<div class="wrap section--tight"><img src="' + esc(it.cover) + '" alt="" style="width:100%;border:1px solid var(--line)"></div>'
+      ? '<div class="wrap section--tight"><img class="detail__cover" src="' + esc(it.cover) + '" alt="" loading="lazy"></div>'
       : "";
 
     host.innerHTML =
       '<div class="wrap detail__head">' +
-        '<a class="backlink" href="' + listHref + '">← ' + esc(t(UI.backTo)) + "</a>" +
+        '<a class="backlink" href="' + backHref + '">← ' + esc(t(UI.backTo)) + "</a>" +
         '<h1 class="detail__title">' + esc(t(it.title)) + "</h1>" +
-        (t(it.summary) ? '<p class="hero__sub" style="margin-top:1.25rem">' + esc(t(it.summary)) + "</p>" : "") +
+        (t(it.summary) ? '<p class="detail__lead">' + esc(t(it.summary)) + "</p>" : "") +
         factsHtml + tagsHtml +
       "</div>" +
       coverHtml +
@@ -817,24 +776,12 @@
 
   /* ---------- 렌더 진입점 ------------------------------------------------- */
 
-  var PAGES = {
-    home: renderHome,
-    about: renderAbout,
-    research: renderResearch,
-    activities: renderActivities,
-    people: renderPeople,
-    archive: renderArchive,
-    entry: renderEntry
-  };
+  var PAGES = { home: renderHome, about: renderAbout, people: renderPeople, entry: renderEntry };
 
   function render() {
     renderHeader();
     renderFooter();
     if (PAGES[pageName]) PAGES[pageName]();
-    els("[data-i18n]").forEach(function (n) {
-      var key = n.getAttribute("data-i18n");
-      if (UI[key]) n.textContent = t(UI[key]);
-    });
     els("[data-i18n-ko]").forEach(function (n) {
       n.textContent = n.getAttribute("data-i18n-" + lang) || n.getAttribute("data-i18n-ko");
     });
@@ -842,13 +789,10 @@
   }
 
   var NEEDS = {
-    home:       ["site", "projects", "activities", "people"],
-    about:      ["site", "about"],
-    research:   ["site", "projects"],
-    activities: ["site", "activities"],
-    people:     ["site", "people"],
-    archive:    ["site", "projects", "activities", "publications"],
-    entry:      ["site", "projects", "activities", "publications"]
+    home:   ["site", "projects", "activities", "publications"],
+    about:  ["site", "about"],
+    people: ["site", "people"],
+    entry:  ["site", "projects", "activities", "publications"]
   };
 
   function init(opts) {
@@ -856,16 +800,24 @@
     document.documentElement.lang = lang;
 
     load(NEEDS[pageName] || ["site"])
-      .then(render)
+      .then(function () {
+        if (pageName === "home") applyHash(false);
+        render();
+        if (pageName === "home") {
+          // 다른 페이지에서 '연구' / '활동·뉴스' 를 눌러 들어온 경우 해당 위치로
+          if (location.hash) setTimeout(function () { applyHash(true); renderArchive(); }, 60);
+          window.addEventListener("hashchange", function () {
+            if (applyHash(true)) renderArchive();
+          });
+        }
+      })
       .catch(function (err) {
         console.error(err);
         var main = el("#main") || document.body;
         main.innerHTML =
           '<div class="wrap section"><p class="empty">' +
-          "콘텐츠를 불러오지 못했습니다 / Failed to load content<br><br>" +
-          esc(err.message) +
-          "<br><br>로컬에서 열었다면 파일을 더블클릭하지 말고 미리보기 서버를 실행하세요:<br>" +
-          "<code>python -m http.server 5173</code></p></div>";
+          "콘텐츠를 불러오지 못했습니다 / Failed to load content<br><br>" + esc(err.message) +
+          "<br><br>로컬에서 열었다면 파일을 더블클릭하지 말고 preview.bat 으로 여세요.</p></div>";
       });
   }
 

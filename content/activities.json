@@ -13,6 +13,30 @@
 
   "items": [
     {
+      "id": "2026-07-08-hcai-seminar",
+      "category": "seminar",
+      "date": "2026-07-08",
+      "title": { "ko": "HCAI Seminar", "en": "HCAI Seminar" },
+      "place": { "ko": "한양대학교", "en": "Hanyang University" },
+      "cover": "",
+      "summary": {
+        "ko": "인간-중심 AI 기술과 디자인의 미래를 주제로 한 발표 세미나를 개최합니다.",
+        "en": "A seminar on human-centered AI technology and the future of design."
+      },
+      "body": {
+        "ko": [
+          "인간-중심 AI 기술과 디자인의 미래를 주제로 한 발표 세미나를 개최합니다. North Carolina State University의 Prof. Byungsoo Kim과 Carnegie Mellon University의 Prof. Haeyoung Kim이 「Human-Centered Interactions with Emerging Technologies: From AI Co-Creation to Physical–Digital Experience」 발표를 시작으로, AI 시대의 디자인 워크플로우 재정의와 인간-중심 상호작용을 주제로 한 연구진들의 발표가 이어집니다. 기술과 인간의 창의적 협업이 만들어갈 새로운 디자인 경험을 함께 살펴보는 자리입니다.",
+          "![HCAI Seminar 포스터](assets/img/activities/2026-07-08-hcai-seminar/poster.jpg)"
+        ],
+        "en": [
+          "A seminar on human-centered AI technology and the future of design. Opening with a talk by Prof. Byungsoo Kim (North Carolina State University) and Prof. Haeyoung Kim (Carnegie Mellon University) on “Human-Centered Interactions with Emerging Technologies: From AI Co-Creation to Physical–Digital Experience,” the program continues with presentations on redefining design workflows in the age of AI and on human-centered interaction. Together we look at the new design experiences that creative collaboration between technology and people can bring about.",
+          "![HCAI Seminar poster](assets/img/activities/2026-07-08-hcai-seminar/poster.jpg)"
+        ]
+      },
+      "gallery": [],
+      "links": []
+    },
+    {
       "id": "2025-11-sig-computational-design-workshop",
       "category": "seminar",
       "date": "2025-11",

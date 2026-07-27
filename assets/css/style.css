@@ -177,7 +177,16 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   display: flex; align-items: center; gap: 1.5rem;
 }
 
-.brand { display: flex; align-items: baseline; gap: 0.625rem; margin-right: auto; }
+.brand { display: flex; align-items: center; gap: 0.75rem; margin-right: auto; color: var(--fg); }
+
+/* 헤더 워드마크 — 모든 페이지에 공통으로 들어갑니다.
+   인라인 SVG라 aspect-ratio 를 명시해야 폭이 안정적으로 잡힙니다. */
+.brand__logo {
+  height: 20px; width: auto; display: block;
+  aspect-ratio: 233.53 / 77.36;
+  transition: opacity var(--dur) var(--ease);
+}
+.brand:hover .brand__logo { opacity: 0.72; }
 
 .brand__mark {
   font-family: var(--font-mono);
@@ -191,6 +200,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   color: var(--fg-dim);
   letter-spacing: -0.01em;
   white-space: nowrap;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--line);
 }
 @media (max-width: 720px) { .brand__name { display: none; } }
 
@@ -277,45 +288,42 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .hero > .wrap { position: relative; z-index: 1; }
 
+.hero__inner { display: flex; flex-direction: column; align-items: flex-start; }
+
+/* 도트 로고 캔버스. 비율(≈2.5:1)은 JS가 계산한 캔버스 크기가 결정하고,
+   여기서는 최대 폭과 마우스 커서만 정합니다. */
+.hero__logo {
+  width: 100%;
+  max-width: min(100%, 860px);
+  margin-bottom: clamp(1.75rem, 4vw, 3rem);
+}
+.hero__logo canvas {
+  width: 100%; height: auto; display: block;
+  cursor: crosshair;
+}
+
 .hero__eyebrow {
   font-family: var(--font-mono);
   font-size: var(--fs-xs);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--fg-dim);
-  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  margin-bottom: 0.75rem;
 }
 
-.hero__headline {
-  font-size: var(--fs-display);
+.hero__title {
+  font-size: var(--fs-h1);
   font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 0.98;
-  max-width: 16ch;
-}
-.hero__headline em {
-  font-style: normal;
-  color: var(--accent);
+  letter-spacing: -0.035em;
+  line-height: 1.1;
 }
 
 .hero__sub {
-  margin-top: clamp(1.75rem, 3vw, 2.5rem);
-  max-width: 46ch;
-  font-size: clamp(1rem, 1.25vw, 1.1875rem);
+  margin-top: clamp(1.5rem, 2.5vw, 2rem);
+  max-width: 52ch;
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
   color: var(--fg-mid);
 }
-
-.hero__meta {
-  margin-top: clamp(2.5rem, 5vw, 4rem);
-  display: flex; flex-wrap: wrap; gap: 1.5rem 3rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--line);
-  font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  letter-spacing: 0.06em;
-  color: var(--fg-dim);
-}
-.hero__meta b { display: block; color: var(--fg); font-size: 1.5rem; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 0.25rem; }
 
 
 /* 6. Section & headings ================================================== */
@@ -336,6 +344,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   border-bottom: 1px solid var(--line-strong);
 }
 .sechead__title { font-size: var(--fs-h2); }
+.sechead__title--sm { font-size: var(--fs-h3); }
 .sechead__title small {
   display: block;
   font-family: var(--font-mono);
@@ -438,6 +447,45 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 
 
+/* 7b. Year groups & load-more =============================================
+   메인 페이지 아카이브. 연도가 큰 모노 숫자로 서고 그 아래 인덱스 행이 붙습니다.
+   ------------------------------------------------------------------------- */
+
+.yeargroup { margin-top: clamp(2.5rem, 5vw, 4rem); }
+.yeargroup:first-of-type { margin-top: clamp(1.5rem, 3vw, 2.5rem); }
+
+.yeargroup__head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+  padding-bottom: 0.875rem;
+  border-bottom: 1px solid var(--line-strong);
+}
+.yeargroup__year {
+  font-family: var(--font-mono);
+  font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--fg);
+}
+.yeargroup__count {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.08em;
+  color: var(--fg-faint);
+}
+.yeargroup .index { border-top: 0; }
+
+.loadmore { display: flex; justify-content: center; margin-top: clamp(2rem, 4vw, 3rem); }
+.loadmore button {
+  padding: 0.75rem 2rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  font-size: var(--fs-sm);
+  color: var(--fg-mid);
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.loadmore button:hover { color: var(--fg); border-color: transparent; background: var(--bg-elev); }
+
+
 /* 8. Cards & grids ======================================================= */
 
 .grid { display: grid; gap: clamp(1.25rem, 2.5vw, 2rem); }
@@ -529,6 +577,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* 10. Prose ============================================================== */
 
 .prose { max-width: 68ch; }
+.prose--wide { max-width: none; }
 .prose > * + * { margin-top: 1.25rem; }
 .prose p { color: var(--fg-mid); }
 .prose strong { color: var(--fg); font-weight: 600; }
@@ -564,7 +613,12 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 
 .prose figure { margin: 2.5rem 0; }
-.prose figure img { width: 100%; border: 1px solid var(--line); border-radius: var(--radius); }
+.prose figure a { border: 0; display: block; }
+.prose figure img {
+  width: 100%; border: 1px solid var(--line); border-radius: var(--radius);
+  transition: opacity var(--dur) var(--ease);
+}
+.prose figure a:hover img { opacity: 0.88; }
 .prose figcaption { margin-top: 0.75rem; font-size: var(--fs-xs); color: var(--fg-dim); font-family: var(--font-mono); letter-spacing: 0.04em; }
 
 
@@ -572,6 +626,12 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .detail__head { padding-block: clamp(3rem, 7vw, 5rem) clamp(2rem, 4vw, 3rem); border-bottom: 1px solid var(--line-strong); }
 .detail__title { font-size: var(--fs-h1); margin-top: 1.25rem; max-width: 24ch; }
+.detail__lead {
+  margin-top: 1.25rem; max-width: 52ch;
+  font-size: clamp(1rem, 1.2vw, 1.125rem); color: var(--fg-mid);
+}
+.detail__tags { margin-top: 2rem; }
+.detail__cover { width: 100%; border: 1px solid var(--line); border-radius: var(--radius); }
 
 .detail__facts {
   margin-top: clamp(2rem, 4vw, 3rem);
@@ -597,7 +657,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .rolelist__item span { color: var(--fg-dim); font-size: var(--fs-sm); }
 
 .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); gap: 1rem; }
-.gallery img { width: 100%; border: 1px solid var(--line); border-radius: var(--radius); }
+.gallery img { width: 100%; border: 1px solid var(--line); border-radius: var(--radius); transition: opacity var(--dur) var(--ease); }
+.gallery a:hover img { opacity: 0.88; }
 
 .backlink {
   display: inline-flex; align-items: center; gap: 0.625rem;
@@ -609,6 +670,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .pager { display: flex; justify-content: space-between; gap: 2rem; padding-block: 2rem; border-top: 1px solid var(--line); }
 .pager a { max-width: 45%; }
+.pager__next { text-align: right; }
 .pager span { display: block; font-family: var(--font-mono); font-size: var(--fs-xs); letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-dim); margin-bottom: 0.5rem; }
 .pager b { font-weight: 500; font-size: var(--fs-sm); }
 .pager a:hover b { color: var(--accent-hi); }
@@ -616,9 +678,24 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 /* 12. Filters & chips ==================================================== */
 
+/* 필터 칩 + 검색을 한 줄에 두는 아카이브 조작 바 */
+.archivebar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+}
+.chip--search {
+  flex: 1 1 16rem;
+  max-width: 24rem;
+  background: transparent;
+  color: var(--fg);
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  letter-spacing: normal;
+}
+
 .filters {
   display: flex; flex-wrap: wrap; gap: 0.5rem;
-  padding-bottom: 1.5rem;
 }
 .chip {
   font-family: var(--font-mono);
@@ -669,6 +746,11 @@ input.chip { outline-offset: 2px; }
   grid-template-columns: minmax(0, 2fr) repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
   gap: clamp(2rem, 4vw, 4rem);
 }
+.footer__logo {
+  height: 24px; width: auto; display: block;
+  aspect-ratio: 233.53 / 77.36;
+  color: var(--fg-dim); margin-bottom: 1.25rem;
+}
 .footer__title { font-size: var(--fs-h3); font-weight: 500; letter-spacing: -0.025em; max-width: 18ch; }
 .footer__note { margin-top: 1rem; font-size: var(--fs-sm); color: var(--fg-dim); max-width: 40ch; }
 
@@ -698,6 +780,14 @@ input.chip { outline-offset: 2px; }
 .mono { font-family: var(--font-mono); }
 .dim  { color: var(--fg-dim); }
 .mt-0 { margin-top: 0; }
+.pre  { white-space: pre-line; }
+.ul   { border-bottom: 1px solid var(--line-strong); }
+
+/* 연구 범위 (소개 페이지) */
+.scope__row { padding-block: clamp(2rem, 4vw, 3.25rem); border-top: 1px solid var(--line); }
+.scope__no { color: var(--accent); }
+.scope__title { font-size: var(--fs-h3); margin-top: 0.75rem; }
+.scope__sub { font-size: var(--fs-sm); color: var(--fg-dim); margin-top: 0.5rem; }
 .stack { display: flex; flex-direction: column; }
 .stack--sm { gap: 0.5rem; }
 .stack--md { gap: 1rem; }
@@ -727,12 +817,11 @@ input.chip { outline-offset: 2px; }
    그래서 KO 모드에서는 해당 라벨만 Pretendard + 보통 자간으로 되돌립니다.
 
    ※ 아래 요소들은 KO 모드에서도 모노를 유지합니다 (내용이 영문/숫자이므로):
-      .brand__mark · .eyebrow · .sechead__title small · .index__date
-      .tag · .langtoggle
+      .eyebrow · .sechead__title small · .index__date
+      .yeargroup__year · .yeargroup__count · .tag · .langtoggle
    ---------------------------------------------------------------------- */
 
 html:lang(ko) .hero__eyebrow,
-html:lang(ko) .hero__meta,
 html:lang(ko) .sechead__aside,
 html:lang(ko) .badge,
 html:lang(ko) .chip,
@@ -749,9 +838,6 @@ html:lang(ko) .empty {
   letter-spacing: 0.005em;
   text-transform: none;
 }
-
-/* 숫자 카운터는 계속 모노로 — 자릿수가 흔들리지 않습니다 */
-html:lang(ko) .hero__meta b { font-family: var(--font-mono); letter-spacing: -0.01em; }
 
 /* 인쇄 */
 @media print {
