@@ -281,8 +281,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   position: relative;
   display: flex;
   align-items: center;
-  min-height: clamp(30rem, 76vh, 50rem);
-  padding-block: clamp(3.5rem, 9vh, 6rem);
+  min-height: clamp(20rem, 54vh, 31rem);
+  padding-block: clamp(2.5rem, 6vh, 4rem);
   border-bottom: 1px solid var(--line);
   overflow: hidden;
   cursor: crosshair;   /* 화면 어디서든 마우스가 로고에 파동을 만듭니다 */
@@ -331,25 +331,26 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 
 .hero__title {
-  font-size: clamp(2.25rem, 4.9vw, 4.25rem);
+  font-size: clamp(1.625rem, 3.1vw, 2.5rem);
   font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 1.06;
-  max-width: 15ch;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+  max-width: 20ch;
 }
 
 .hero__alt {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   font-family: var(--font-mono);
-  font-size: var(--fs-sm);
-  letter-spacing: 0.02em;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.04em;
   color: var(--fg-dim);
 }
 
 .hero__sub {
-  margin-top: clamp(1.75rem, 3vw, 2.5rem);
-  max-width: 42ch;
-  font-size: clamp(1rem, 1.15vw, 1.125rem);
+  margin-top: clamp(1.25rem, 2.2vw, 1.75rem);
+  max-width: 40ch;
+  font-size: var(--fs-sm);
+  line-height: 1.65;
   color: var(--fg-mid);
 }
 

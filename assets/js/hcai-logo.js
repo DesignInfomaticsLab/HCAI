@@ -61,13 +61,19 @@
   var DOT_COLOR = { r: 255, g: 255, b: 255, a: 0.85, opVar: 0.35, opMin: 0.15 };
 
   /* 작은 크기용 프리셋 ------------------------------------------------------
-     모든 파라미터는 캔버스 크기에 비례해 함께 줄어듭니다. 그래서 헤더처럼
-     작은 자리에 v2 설정을 그대로 쓰면 점이 1px 미만이 되어 글자가 뭉개집니다.
-     같은 면적에 '더 적고 굵은 점'을 놓아야 작은 크기에서도 HCAI 로 읽힙니다.
+     모든 파라미터는 캔버스 크기에 비례해 줄어듭니다. 헤더(104px)처럼 작은 자리에서는
+     글자 획 하나가 4~5px 밖에 안 되므로, 점이 굵으면 획을 덩어리로 덮어 버려
+     'HCAI' 가 아니라 얼룩으로 보입니다.
+
+     해법은 두 가지를 함께 씁니다.
+       1) 점과 간격을 잘게  — 획 하나에 점이 3개쯤 들어가도록
+       2) 내부 해상도를 3배로 (superSample) — 잘아진 점이 서브픽셀로 뭉개지지 않게.
+          헤더 로고는 정지 렌더라 한 번만 그리므로 비용이 들지 않습니다.
      ---------------------------------------------------------------------- */
   var COMPACT = {
-    config: { dotSize: 9.5, spacing: 30, sizeVariance: 3.5, opacityVar: 0.1, falloff: 0.12, dotAlpha: 1 },
-    neural: { lineMaxDist: 17, lineWidth: 2.2, lineMaxCount: 3, glowIntensity: 0.02, pulseWavelength: 150 }
+    superSample: 3,
+    config: { dotSize: 3.4, spacing: 12.5, sizeVariance: 1.6, opacityVar: 0.08, falloff: 0.08, falloffMin: 0.55, dotAlpha: 1 },
+    neural: { lineMaxDist: 7, lineWidth: 0.9, lineMaxCount: 3, glowIntensity: 0.015, glowRadius: 1.3, pulseWavelength: 120 }
   };
 
   function assign(base, extra) {
@@ -136,6 +142,8 @@
     var preset = opts.compact ? COMPACT : { config: null, neural: null };
     this.cfg = assign(assign(CONFIG, preset.config), opts.config);
     this.nrl = assign(assign(NEURAL, preset.neural), opts.neural);
+    // 화면 픽셀보다 몇 배 크게 그릴지. CSS가 축소해 주므로 그만큼 또렷해집니다.
+    this.superSample = opts.superSample || preset.superSample || 1;
     // 캔버스가 배경 레이어라 pointer-events 를 받지 못할 때, 마우스를 추적할 다른 요소
     this.pointerTarget = opts.pointerTarget || canvas;
     this.maxDpr = opts.maxDpr || 2;
@@ -243,7 +251,7 @@
 
     var rect = this.canvas.getBoundingClientRect();
     var cssW = rect.width || this.canvas.clientWidth || 600;
-    var dpr = Math.min(window.devicePixelRatio || 1, this.maxDpr);
+    var dpr = Math.max(Math.min(window.devicePixelRatio || 1, this.maxDpr), this.superSample);
 
     // 여백 포함 전체 폭이 cssW*dpr 이 되도록 scale 을 역산
     var unitW = VIEW_W + PAD_UNITS;
