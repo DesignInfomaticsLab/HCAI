@@ -492,6 +492,15 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   font-size: var(--fs-xs); color: var(--fg-dim); line-height: 1.5;
 }
 
+/* DOI 표시 — 이 행이 원문으로 연결된다는 신호 */
+.pub__doi {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem; letter-spacing: 0.08em;
+  color: var(--fg-faint);
+  transition: color var(--dur) var(--ease);
+}
+.index__row:hover .pub__doi { color: var(--accent-hi); }
+
 .index__arrow {
   justify-self: end;
   font-family: var(--font-mono);

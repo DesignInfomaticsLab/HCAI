@@ -650,7 +650,9 @@
     var link = p.doi || p.url || "";
     var meta =
       (p.index ? '<span class="badge">' + esc(p.index) + "</span>" : "") +
-      (p.publisher ? ' <span class="index__note">' + esc(p.publisher) + "</span>" : "");
+      (p.publisher ? ' <span class="index__note">' + esc(p.publisher) + "</span>" : "") +
+      // 눌러서 원문으로 갈 수 있다는 걸 드러냅니다
+      (link ? ' <span class="pub__doi">DOI ↗</span>' : "");
 
     var body =
       '<span class="index__date">' + esc(fmtDate(p.date)) + "</span>" +

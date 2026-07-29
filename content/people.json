@@ -1,7 +1,7 @@
 {
   "_comment": "구성원. 새 연구원을 추가하려면 members 배열에 항목을 하나 복사해 붙여넣고 내용을 바꾸세요. group 값은 아래 groups 의 id 중 하나여야 합니다. 졸업하면 group 을 'alumni' 로만 바꾸면 자동으로 졸업생 섹션으로 이동합니다.",
   "_source": "명단·직함·영문 표기는 designai.hanyang.ac.kr/People 기준입니다. 그쪽이 바뀌면 여기도 맞춰 주세요.",
-  "_photoNote": "사진은 assets/img/people/<id>.jpg 로 넣습니다. 3:4 세로 비율 권장(예: 600x800), 200KB 이하. 비워두면 이니셜이 자동으로 그려집니다.",
+  "_photoNote": "사진은 assets/img/people/<id>.jpg 로 넣습니다. 3:4 세로 비율 권장(예: 600x800), 200KB 이하. 비워두면 이니셜이 자동으로 그려집니다. groups 에 hidePhoto 가 켜진 그룹(Alumni)은 사진을 쓰지 않으므로 photo 항목 자체를 넣지 않습니다.",
   "_bioNote": "bio 는 한두 문장의 연구 관심사입니다. 양식은 docs/05-연구원-정보-양식.md 를 배포해 취합하세요.",
 
   "groups": [
@@ -137,11 +137,6 @@
       "name": { "ko": "조태희", "en": "Tae Hee Jo" },
       "role": { "ko": "박사과정", "en": "Ph.D. Student" },
       "affiliation": { "ko": "한양대학교 실내건축디자인학과", "en": "Dept. of Interior Architecture Design, Hanyang University" },
-      "email": "",
-      "keywords": [],
-      "bio": { "ko": "", "en": "" },
-      "photo": "",
-      "links": [],
       "since": "2021"
     },
     {
@@ -150,11 +145,6 @@
       "name": { "ko": "박정민", "en": "Jeongmin Park" },
       "role": { "ko": "학부 연구생 (2026 봄)", "en": "Undergraduate Researcher (Spring 2026)" },
       "affiliation": { "ko": "한양대학교 실내건축디자인학과", "en": "Dept. of Interior Architecture Design, Hanyang University" },
-      "email": "",
-      "keywords": [],
-      "bio": { "ko": "", "en": "" },
-      "photo": "",
-      "links": [],
       "since": "2026"
     }
   ]
