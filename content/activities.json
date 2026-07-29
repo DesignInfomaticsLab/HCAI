@@ -37,36 +37,6 @@
       "links": []
     },
     {
-      "id": "2025-11-sig-computational-design-workshop",
-      "category": "seminar",
-      "date": "2025-11",
-      "title": {
-        "ko": "제2회 SIG 컴퓨테이셔널 디자인 워크샵",
-        "en": "2nd SIG Computational Design Workshop"
-      },
-      "place": {
-        "ko": "한양대학교 생활과학관",
-        "en": "College of Human Ecology, Hanyang University"
-      },
-      "cover": "",
-      "summary": {
-        "ko": "컴퓨테이셔널 디자인 분야의 연구자와 실무자가 모여 최신 연구 동향과 실무 적용 사례를 공유하는 제2회 SIG 워크샵을 개최합니다.",
-        "en": "The second SIG workshop brings together researchers and practitioners in computational design to share recent research and applied case studies."
-      },
-      "body": {
-        "ko": [
-          "컴퓨테이셔널 디자인 분야의 연구자와 실무자가 모여 최신 연구 동향과 실무 적용 사례를 공유합니다.",
-          "> 상세 프로그램은 확정 후 업데이트될 예정입니다."
-        ],
-        "en": [
-          "Researchers and practitioners in computational design gather to share recent research directions and applied case studies.",
-          "> The detailed program will be updated once confirmed."
-        ]
-      },
-      "gallery": [],
-      "links": []
-    },
-    {
       "id": "2025-08-01-institute-launch",
       "category": "news",
       "date": "2025-08-01",

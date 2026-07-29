@@ -1,6 +1,20 @@
 {
   "_comment": "센터 소개 페이지 본문. body 는 '줄 배열'입니다. 각 줄 앞에 기호를 붙여 서식을 지정합니다: '## 소제목', '- 목록', '> 강조박스', '![캡션](이미지경로)'. 아무 기호도 없으면 일반 문단.",
 
+  "_leadNote": "메인 페이지에 싣는 짧은 소개. 아래 intro 원문에서 문단을 골라 옮긴 것이며, 새로 지어 쓴 문장이 아닙니다.",
+  "lead": {
+    "ko": [
+      "최근 인공지능(AI) 기술의 비약적인 발전은 디자인 분야 전반에 걸쳐 큰 변화를 일으키고 있습니다. 특히 생성형 AI, 사용자 행동 예측 모델 등 다양한 기술이 디자인 과정에 활용되며, 효율성과 창의성 모두에서 새로운 가능성을 제시하고 있습니다.",
+      "> 그러나 이러한 변화 속에서도 디자인의 핵심은 인간-중심에 있다는 점을 간과할 수 없습니다.",
+      "**한양대학교 인간-중심 AI 디자인 연구센터**는 이러한 문제의식에 기반하여, AI 기술을 인간의 창의성과 감성, 직관을 보완하는 도구로서 활용하고자 설립되었습니다."
+    ],
+    "en": [
+      "Recent advances in artificial intelligence are reshaping the field of design. Generative AI and user-behavior prediction models are entering the design process, opening new possibilities in both efficiency and creativity.",
+      "> Yet through all of this change, the core of design remains human-centered.",
+      "**The Human-Centered AI Design Institute at Hanyang University** was founded on this premise: to use AI as a tool that complements human creativity, sensibility, and intuition."
+    ]
+  },
+
   "intro": {
     "ko": [
       "최근 인공지능(AI) 기술의 비약적인 발전은 디자인 분야 전반에 걸쳐 큰 변화를 일으키고 있습니다. 특히 생성형 AI, 사용자 행동 예측 모델 등 다양한 기술이 디자인 과정에 활용되며, 효율성과 창의성 모두에서 새로운 가능성을 제시하고 있습니다.",

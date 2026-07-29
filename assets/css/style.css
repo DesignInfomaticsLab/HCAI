@@ -281,8 +281,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   position: relative;
   display: flex;
   align-items: center;
-  min-height: clamp(16rem, 40vh, 23rem);
-  padding-block: clamp(2rem, 4.5vh, 3rem);
+  min-height: clamp(19rem, 47vh, 27rem);
+  padding-block: clamp(2.5rem, 5.5vh, 3.75rem);
   border-bottom: 1px solid var(--line);
   overflow: hidden;
   cursor: crosshair;   /* 화면 어디서든 마우스가 로고에 파동을 만듭니다 */
@@ -321,23 +321,23 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .hero__inner { position: relative; z-index: 1; }
 
-/* 히어로의 글자 위계
-     제목        1.375 → 1.875rem   (로고가 주인공이라 절제)
-     기관명·영문 1rem               ← 본문보다 한 단계 크게
-     본문        0.875rem (--fs-sm)
+/* 히어로의 글자 위계 — 비율은 유지하고 전체를 한 단계 키웠습니다
+     제목        1.625 → 2.25rem    (로고가 주인공이라 절제)
+     기관명·영문 1.125rem           ← 본문보다 한 단계 크게
+     본문        1rem
    ------------------------------------------------------------------------ */
 
 .hero__eyebrow {
   font-family: var(--font-mono);
-  font-size: 1rem;
-  letter-spacing: 0.1em;
+  font-size: 1.125rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--fg-mid);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.875rem;
 }
 
 .hero__title {
-  font-size: clamp(1.375rem, 2.4vw, 1.875rem);
+  font-size: clamp(1.625rem, 2.9vw, 2.25rem);
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1.16;
@@ -345,18 +345,18 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 
 .hero__alt {
-  margin-top: 0.5rem;
+  margin-top: 0.625rem;
   font-family: var(--font-mono);
-  font-size: 1rem;
-  letter-spacing: 0.01em;
+  font-size: 1.125rem;
+  letter-spacing: 0.005em;
   color: var(--fg-mid);
 }
 
 .hero__sub {
-  margin-top: clamp(1.125rem, 2vw, 1.5rem);
+  margin-top: clamp(1.25rem, 2.2vw, 1.75rem);
   max-width: 40ch;
-  font-size: var(--fs-sm);
-  line-height: 1.65;
+  font-size: 1rem;
+  line-height: 1.7;
   color: var(--fg-dim);
 }
 
@@ -499,6 +499,60 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 
 
+/* 6b. Home — 센터 소개 2단 ================================================
+   왼쪽에 소개 글, 오른쪽에 연구 범위. 스크롤 없이 한 화면에 함께 잡히도록
+   양쪽 모두 요약본만 싣고 자세한 내용은 소개 페이지로 넘깁니다.
+   ------------------------------------------------------------------------- */
+
+.homeabout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .homeabout { grid-template-columns: 1fr; gap: clamp(2.5rem, 8vw, 3.5rem); }
+}
+
+.homeabout__more { margin-top: 1.75rem; }
+
+.scopelist { display: flex; flex-direction: column; }
+
+.scopelist__item {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: 1rem;
+  padding-block: 1.125rem;
+  border-top: 1px solid var(--line);
+  transition: background var(--dur) var(--ease);
+}
+.scopelist__item:last-child { border-bottom: 1px solid var(--line); }
+.scopelist__item:hover .scopelist__title { color: var(--accent-hi); }
+
+.scopelist__no {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  padding-top: 0.3em;
+}
+.scopelist__title {
+  display: block;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  transition: color var(--dur) var(--ease);
+}
+.scopelist__sub {
+  display: block;
+  margin-top: 0.375rem;
+  font-size: var(--fs-sm);
+  color: var(--fg-dim);
+  line-height: 1.5;
+}
+
+
 /* 7b. Year groups & load-more =============================================
    메인 페이지 아카이브. 연도가 큰 모노 숫자로 서고 그 아래 인덱스 행이 붙습니다.
    ------------------------------------------------------------------------- */
@@ -587,8 +641,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .person { display: flex; flex-direction: column; gap: 0.875rem; }
 
+/* 제공되는 인물 사진이 3:4 세로라 그 비율 그대로 씁니다 — 얼굴이 잘리지 않습니다 */
 .person__photo {
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 3 / 4;
   background: var(--bg-elev);
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -612,6 +667,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .person__name span { color: var(--fg-dim); font-weight: 400; font-size: var(--fs-sm); margin-left: 0.5rem; }
 .person__role { font-family: var(--font-mono); font-size: var(--fs-xs); letter-spacing: 0.08em; color: var(--accent); }
 .person__aff  { font-size: var(--fs-sm); color: var(--fg-dim); line-height: 1.5; white-space: pre-line; }
+.person__bio  { font-size: var(--fs-sm); color: var(--fg-mid); line-height: 1.6; }
 .person__links { display: flex; flex-wrap: wrap; gap: 0.75rem; font-family: var(--font-mono); font-size: var(--fs-xs); }
 .person__links a { color: var(--fg-mid); border-bottom: 1px solid var(--line-strong); transition: color var(--dur) var(--ease); }
 .person__links a:hover { color: var(--accent-hi); }
@@ -729,6 +785,14 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 
 /* 12. Filters & chips ==================================================== */
+
+.archivecount {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.08em;
+  color: var(--fg-dim);
+  margin-bottom: 1rem;
+}
 
 /* 필터 칩 + 검색을 한 줄에 두는 아카이브 조작 바 */
 .archivebar {

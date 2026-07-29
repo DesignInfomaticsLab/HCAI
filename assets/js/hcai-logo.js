@@ -79,11 +79,11 @@
   var COMPACT = {
     superSample: 4,
     config: {
-      dotSize: 3.2, spacing: 11, sizeVariance: 1.2, opacityVar: 0.06,
+      dotSize: 4.3, spacing: 11.5, sizeVariance: 1.4, opacityVar: 0.06,
       falloff: 0.05, falloffMin: 0.7, dotAlpha: 1,
-      solidBase: 0.34
+      solidBase: 0.3
     },
-    neural: { lineMaxDist: 6, lineWidth: 0.7, lineMaxCount: 3, glowIntensity: 0.012, glowRadius: 1.2, pulseWavelength: 110 }
+    neural: { lineMaxDist: 6, lineWidth: 0.8, lineMaxCount: 3, glowIntensity: 0.012, glowRadius: 1.2, pulseWavelength: 110 }
   };
 
   function assign(base, extra) {

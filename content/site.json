@@ -27,14 +27,13 @@
   },
 
   "nav": [
-    { "href": "about.html",            "label": { "ko": "센터 소개",  "en": "About" } },
-    { "href": "index.html#research",   "label": { "ko": "연구",      "en": "Research" } },
-    { "href": "index.html#activities", "label": { "ko": "활동·뉴스", "en": "Activities" } },
-    { "href": "people.html",           "label": { "ko": "구성원",    "en": "People" } }
+    { "href": "about.html",   "label": { "ko": "센터 소개",       "en": "About" } },
+    { "href": "archive.html", "label": { "ko": "연구·활동·뉴스", "en": "Research & News" } },
+    { "href": "people.html",  "label": { "ko": "구성원",          "en": "People" } }
   ],
 
   "home": {
-    "_comment": "메인 페이지 아카이브에 처음 보여 줄 항목 수. 이보다 많아지면 오래된 항목은 접히고 '더 보기'로 펼칩니다. 삭제되는 것은 아닙니다.",
+    "_comment": "연구·활동·뉴스 페이지에 처음 보여 줄 항목 수. 이보다 많아지면 오래된 항목은 접히고 '더 보기'로 펼칩니다. 삭제되는 것은 아닙니다.",
     "archiveLimit": 24,
     "loadMoreStep": 24
   },

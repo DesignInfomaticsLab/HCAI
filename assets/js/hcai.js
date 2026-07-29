@@ -40,7 +40,11 @@
     activities:   { ko: "활동·뉴스", en: "Activities" },
     people:       { ko: "구성원", en: "People" },
     publications: { ko: "연구 성과", en: "Publications" },
-    archive:      { ko: "아카이브", en: "Archive" },
+    archive:      { ko: "연구 · 활동 · 뉴스", en: "Research & News" },
+    about:        { ko: "센터 소개", en: "About" },
+    scope:        { ko: "연구 범위", en: "Research Scope" },
+    more:         { ko: "자세히 보기", en: "Read more" },
+    seeArchive:   { ko: "연구 · 활동 · 뉴스 전체 보기", en: "Browse all records" },
     sitemap:      { ko: "바로가기", en: "Sitemap" },
     empty:        { ko: "아직 등록된 항목이 없습니다", en: "Nothing here yet" },
     noResult:     { ko: "검색 결과가 없습니다", en: "No matching entries" },
@@ -357,6 +361,7 @@
           '<p class="person__name">' + esc(t(m.name)) + (other ? "<span>" + esc(other) + "</span>" : "") + "</p>" +
           (t(m.role) ? '<p class="person__role">' + esc(t(m.role)) + "</p>" : "") +
           (t(m.affiliation) ? '<p class="person__aff">' + esc(t(m.affiliation)) + "</p>" : "") +
+          (t(m.bio) ? '<p class="person__bio">' + esc(t(m.bio)) + "</p>" : "") +
           tags +
           (links.length ? '<p class="person__links">' + links.join("") + "</p>" : "") +
         "</div>" +
@@ -423,7 +428,7 @@
   }
 
   function renderArchive() {
-    var host = el("#home-archive");
+    var host = el("#archive-list");
     if (!host) return;
 
     var home = data.site.home || {};
@@ -490,13 +495,10 @@
     }).join("");
 
     host.innerHTML =
-      '<div class="wrap">' +
-        '<div class="sechead" id="archive">' +
-          '<h2 class="sechead__title"><small>Archive</small>' + esc(t(UI.archive)) + "</h2>" +
-          '<span class="sechead__aside">' + shown.length +
-            (remaining > 0 ? " " + t(UI.showingOf) + " " + matched.length : "") +
-            " " + esc(t(UI.resultCount)) + "</span>" +
-        "</div>" +
+      '<div class="wrap" id="archive">' +
+        '<div class="archivecount">' + shown.length +
+          (remaining > 0 ? " " + t(UI.showingOf) + " " + matched.length : "") +
+          " " + esc(t(UI.resultCount)) + "</div>" +
 
         '<div class="archivebar">' +
           '<div class="filters">' + chips + "</div>" +
@@ -567,9 +569,10 @@
 
   /* ---------- 페이지: 홈 -------------------------------------------------- */
 
-  function renderHome() {
+  function renderHero() {
     var site = data.site;
     var hero = el("#hero");
+    if (!hero) return;
 
     // 제목의 반대쪽 언어 표기 — 원래 Cargo 타이틀 블록도 국문/영문을 함께 세웠습니다
     var alt = lang === "ko" ? (site.hero.title.en || "") : (site.hero.title.ko || "");
@@ -586,8 +589,52 @@
 
     // 캔버스가 배경이라 클릭을 받지 못하므로, 히어로 영역 전체에서 마우스를 추적합니다
     mountLogo("hero", "hero-logo", { interactive: true, pointerTarget: hero });
+  }
 
-    renderArchive();
+  /* ---------- 페이지: 홈 (히어로 + 센터 소개 2단) ------------------------- */
+
+  function renderHome() {
+    renderHero();
+
+    var about = data.about;
+    var host = el("#home-about");
+    if (!host) return;
+
+    // 오른쪽 열 — 연구 범위를 번호·제목·부제만 추려 한눈에 보이게
+    var scopeHtml = (about.scope || []).map(function (s) {
+      return (
+        '<a class="scopelist__item" href="about.html#about-scope">' +
+          '<span class="scopelist__no">' + esc(s.no) + "</span>" +
+          "<span>" +
+            '<span class="scopelist__title">' + esc(t(s.title)) + "</span>" +
+            '<span class="scopelist__sub">' + esc(t(s.subtitle)) + "</span>" +
+          "</span>" +
+        "</a>"
+      );
+    }).join("");
+
+    var total = allEntries().length;
+
+    host.innerHTML =
+      '<div class="wrap">' +
+        '<div class="homeabout">' +
+          "<div>" +
+            '<div class="sechead">' +
+              '<h2 class="sechead__title"><small>About</small>' + esc(t(UI.about)) + "</h2>" +
+            "</div>" +
+            '<div class="prose prose--wide">' + renderBody(about.lead) + "</div>" +
+            '<p class="homeabout__more"><a class="backlink" href="about.html">' + esc(t(UI.more)) + " →</a></p>" +
+          "</div>" +
+          "<div>" +
+            '<div class="sechead">' +
+              '<h2 class="sechead__title"><small>Scope</small>' + esc(t(UI.scope)) + "</h2>" +
+            "</div>" +
+            '<div class="scopelist">' + scopeHtml + "</div>" +
+            '<p class="homeabout__more"><a class="backlink" href="archive.html">' +
+              esc(t(UI.seeArchive)) + " (" + total + ") →</a></p>" +
+          "</div>" +
+        "</div>" +
+      "</div>";
   }
 
   /* ---------- 페이지: 소개 ----------------------------------------------- */
@@ -669,7 +716,7 @@
     var type = qs("type"), id = qs("id");
     var host = el("#entry");
 
-    var backHref = type === "activity" ? "index.html#activities" : "index.html#research";
+    var backHref = type === "activity" ? "archive.html#activities" : "archive.html#research";
     var items = type === "activity" ? (data.activities.items || []) : (data.projects.items || []);
     var idx = -1;
     items.forEach(function (it, i) { if (it.id === id) idx = i; });
@@ -789,7 +836,13 @@
 
   /* ---------- 렌더 진입점 ------------------------------------------------- */
 
-  var PAGES = { home: renderHome, about: renderAbout, people: renderPeople, entry: renderEntry };
+  var PAGES = {
+    home: renderHome,
+    archive: renderArchive,
+    about: renderAbout,
+    people: renderPeople,
+    entry: renderEntry
+  };
 
   function render() {
     renderHeader();
@@ -802,10 +855,11 @@
   }
 
   var NEEDS = {
-    home:   ["site", "projects", "activities", "publications"],
-    about:  ["site", "about"],
-    people: ["site", "people"],
-    entry:  ["site", "projects", "activities", "publications"]
+    home:    ["site", "about", "projects", "activities", "publications"],
+    archive: ["site", "projects", "activities", "publications"],
+    about:   ["site", "about"],
+    people:  ["site", "people"],
+    entry:   ["site", "projects", "activities", "publications"]
   };
 
   function init(opts) {
@@ -814,11 +868,10 @@
 
     load(NEEDS[pageName] || ["site"])
       .then(function () {
-        if (pageName === "home") applyHash(false);
+        if (pageName === "archive") applyHash(false);
         render();
-        if (pageName === "home") {
-          // 다른 페이지에서 '연구' / '활동·뉴스' 를 눌러 들어온 경우 해당 위치로
-          if (location.hash) setTimeout(function () { applyHash(true); renderArchive(); }, 60);
+        if (pageName === "archive") {
+          // archive.html#research 처럼 필터를 지정해 들어온 경우
           window.addEventListener("hashchange", function () {
             if (applyHash(true)) renderArchive();
           });
