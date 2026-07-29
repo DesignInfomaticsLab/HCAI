@@ -40,7 +40,7 @@
     activities:   { ko: "활동·뉴스", en: "Activities" },
     people:       { ko: "구성원", en: "People" },
     publications: { ko: "연구 성과", en: "Publications" },
-    archive:      { ko: "기록", en: "Archive" },
+    archive:      { ko: "아카이브", en: "Archive" },
     sitemap:      { ko: "바로가기", en: "Sitemap" },
     empty:        { ko: "아직 등록된 항목이 없습니다", en: "Nothing here yet" },
     noResult:     { ko: "검색 결과가 없습니다", en: "No matching entries" },

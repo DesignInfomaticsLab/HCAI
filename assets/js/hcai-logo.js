@@ -30,7 +30,9 @@
     falloffRadius: 1.15,
     falloffMin: 0.1,
     dotColor: "#ffffff",
-    dotAlpha: 0.85
+    dotAlpha: 0.85,
+    // 점 아래에 워드마크를 옅게 깔아 글자 형태를 보장합니다 (0 = 사용 안 함)
+    solidBase: 0
   };
 
   var ANIM = {
@@ -65,15 +67,23 @@
      글자 획 하나가 4~5px 밖에 안 되므로, 점이 굵으면 획을 덩어리로 덮어 버려
      'HCAI' 가 아니라 얼룩으로 보입니다.
 
-     해법은 두 가지를 함께 씁니다.
-       1) 점과 간격을 잘게  — 획 하나에 점이 3개쯤 들어가도록
-       2) 내부 해상도를 3배로 (superSample) — 잘아진 점이 서브픽셀로 뭉개지지 않게.
-          헤더 로고는 정지 렌더라 한 번만 그리므로 비용이 들지 않습니다.
+     점만 잘게 만드는 것으로는 해결되지 않습니다. 점은 로고 중심을 기준으로 한
+     '동심원' 위에 놓이는데, 작은 캔버스에서 원 간격이 픽셀 격자에 가까워지면
+     모아레가 생겨 획이 사선으로 끊어집니다. 잘게 할수록 오히려 심해집니다.
+
+     그래서 세 가지를 함께 씁니다.
+       1) solidBase — 점 아래에 워드마크를 옅게 깔아 글자 형태를 항상 보장
+       2) 점은 그 위의 질감 역할 (간격·크기를 작은 화면에 맞게만 조정)
+       3) 내부 해상도 4배 렌더링 (superSample). 정지 렌더라 1회 비용만 듭니다.
      ---------------------------------------------------------------------- */
   var COMPACT = {
-    superSample: 3,
-    config: { dotSize: 3.4, spacing: 12.5, sizeVariance: 1.6, opacityVar: 0.08, falloff: 0.08, falloffMin: 0.55, dotAlpha: 1 },
-    neural: { lineMaxDist: 7, lineWidth: 0.9, lineMaxCount: 3, glowIntensity: 0.015, glowRadius: 1.3, pulseWavelength: 120 }
+    superSample: 4,
+    config: {
+      dotSize: 3.2, spacing: 11, sizeVariance: 1.2, opacityVar: 0.06,
+      falloff: 0.05, falloffMin: 0.7, dotAlpha: 1,
+      solidBase: 0.34
+    },
+    neural: { lineMaxDist: 6, lineWidth: 0.7, lineMaxCount: 3, glowIntensity: 0.012, glowRadius: 1.2, pulseWavelength: 110 }
   };
 
   function assign(base, extra) {
@@ -271,6 +281,16 @@
     tctx.drawImage(this.img, pad, pad, lw, lh);
     this.mask = tctx.getImageData(0, 0, tmp.width, tmp.height);
 
+    // solidBase 용 — 워드마크를 점 색으로 칠한 판을 미리 만들어 둡니다
+    if (this.cfg.solidBase > 0) {
+      tctx.globalCompositeOperation = "source-in";
+      tctx.fillStyle = this.cfg.dotColor;
+      tctx.fillRect(0, 0, tmp.width, tmp.height);
+      this.solid = tmp;
+    } else {
+      this.solid = null;
+    }
+
     this._regenerateSources();
     this.geomKey = "";           // 지오메트리 캐시 무효화
     this._ensureGeometry(this.seq[this.stepIndex]);
@@ -419,6 +439,13 @@
 
     // 배경은 칠하지 않습니다 — 페이지 배경이 그대로 보이도록
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    // 0. 워드마크 밑판 — 작은 크기에서 글자 형태가 무너지지 않도록 받쳐 줍니다
+    if (this.solid) {
+      ctx.globalAlpha = this.cfg.solidBase * ga;
+      ctx.drawImage(this.solid, 0, 0);
+      ctx.globalAlpha = 1;
+    }
 
     // 1. 페더 글로우 (점 뒤)
     if (this.nrl.featherEnabled) {

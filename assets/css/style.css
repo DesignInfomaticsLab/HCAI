@@ -281,8 +281,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   position: relative;
   display: flex;
   align-items: center;
-  min-height: clamp(20rem, 54vh, 31rem);
-  padding-block: clamp(2.5rem, 6vh, 4rem);
+  min-height: clamp(16rem, 40vh, 23rem);
+  padding-block: clamp(2rem, 4.5vh, 3rem);
   border-bottom: 1px solid var(--line);
   overflow: hidden;
   cursor: crosshair;   /* 화면 어디서든 마우스가 로고에 파동을 만듭니다 */
@@ -321,37 +321,43 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .hero__inner { position: relative; z-index: 1; }
 
+/* 히어로의 글자 위계
+     제목        1.375 → 1.875rem   (로고가 주인공이라 절제)
+     기관명·영문 1rem               ← 본문보다 한 단계 크게
+     본문        0.875rem (--fs-sm)
+   ------------------------------------------------------------------------ */
+
 .hero__eyebrow {
   font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  letter-spacing: 0.16em;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--fg-dim);
-  margin-bottom: 1rem;
+  color: var(--fg-mid);
+  margin-bottom: 0.75rem;
 }
 
 .hero__title {
-  font-size: clamp(1.625rem, 3.1vw, 2.5rem);
+  font-size: clamp(1.375rem, 2.4vw, 1.875rem);
   font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 1.12;
-  max-width: 20ch;
+  letter-spacing: -0.03em;
+  line-height: 1.16;
+  max-width: 24ch;
 }
 
 .hero__alt {
-  margin-top: 0.75rem;
+  margin-top: 0.5rem;
   font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  letter-spacing: 0.04em;
-  color: var(--fg-dim);
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  color: var(--fg-mid);
 }
 
 .hero__sub {
-  margin-top: clamp(1.25rem, 2.2vw, 1.75rem);
+  margin-top: clamp(1.125rem, 2vw, 1.5rem);
   max-width: 40ch;
   font-size: var(--fs-sm);
   line-height: 1.65;
-  color: var(--fg-mid);
+  color: var(--fg-dim);
 }
 
 /* 좁은 화면에서는 겹칠 자리가 없으므로 로고를 제목 위로 올려 세웁니다 */
