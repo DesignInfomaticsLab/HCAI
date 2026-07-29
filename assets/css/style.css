@@ -948,7 +948,22 @@ input.chip { outline-offset: 2px; }
 .ul   { border-bottom: 1px solid var(--line-strong); }
 
 /* 연구 범위 (소개 페이지) */
-.scope__row { padding-block: clamp(2rem, 4vw, 3.25rem); border-top: 1px solid var(--line); }
+/* 스크롤 여백은 html 의 scroll-padding-top 이 이미 잡아 줍니다.
+   여기서 scroll-margin-top 을 또 주면 두 값이 더해져 과하게 내려갑니다. */
+.scope__row {
+  padding-block: clamp(2rem, 4vw, 3.25rem);
+  border-top: 1px solid var(--line);
+  position: relative;
+}
+
+/* 홈의 '연구 범위'에서 눌러 들어온 항목을 짚어 줍니다 (JS가 .is-target 을 붙임) */
+.scope__row.is-target::before {
+  content: "";
+  position: absolute; left: -1rem; top: 0; bottom: 0;
+  width: 2px; background: var(--accent);
+}
+.scope__row.is-target .scope__title { color: var(--accent-hi); }
+
 .scope__no { color: var(--accent); }
 .scope__title { font-size: var(--fs-h3); margin-top: 0.75rem; }
 .scope__sub { font-size: var(--fs-sm); color: var(--fg-dim); margin-top: 0.5rem; }

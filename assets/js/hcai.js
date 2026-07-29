@@ -601,7 +601,8 @@
     // 오른쪽 열 — 연구 범위를 번호·제목·부제만 추려 한눈에 보이게
     var scopeHtml = (about.scope || []).map(function (s) {
       return (
-        '<a class="scopelist__item" href="about.html#about-scope">' +
+        // 소개 페이지의 해당 항목으로 바로 내려가도록 번호별 앵커를 겁니다
+        '<a class="scopelist__item" href="about.html#scope-' + esc(s.no) + '">' +
           '<span class="scopelist__no">' + esc(s.no) + "</span>" +
           "<span>" +
             '<span class="scopelist__title">' + esc(t(s.title)) + "</span>" +
@@ -769,7 +770,7 @@
 
     var scopeHtml = about.scope.map(function (s) {
       return (
-        '<div class="split scope__row">' +
+        '<div class="split scope__row" id="scope-' + esc(s.no) + '">' +
           "<div>" +
             '<p class="eyebrow scope__no">' + esc(s.no) + "</p>" +
             '<h3 class="scope__title">' + esc(t(s.title)) + "</h3>" +
@@ -946,6 +947,38 @@
       pagerHtml;
   }
 
+  /** 해시가 가리키는 요소로 스크롤합니다.
+   *  본문을 JS로 그리기 때문에 브라우저의 기본 해시 이동은 요소가 생기기 전에
+   *  일어나 버립니다. 그래서 렌더가 끝난 뒤 직접 한 번 옮겨 줍니다.
+   *  (헤더에 가리지 않도록 html 의 scroll-padding-top 이 함께 작동합니다) */
+  function scrollToHash(smooth) {
+    var id = (location.hash || "").replace("#", "");
+    if (!id) return;
+    var target = document.getElementById(id);
+    if (!target) return;
+
+    // CSS :target 은 페이지 진입 시점에 이미 있던 요소에만 걸립니다.
+    // 본문을 JS로 그리므로 직접 클래스를 붙여 표시합니다.
+    els(".is-target").forEach(function (n) { n.classList.remove("is-target"); });
+    target.classList.add("is-target");
+
+    // html 에 scroll-behavior: smooth 가 걸려 있어서 "auto" 를 주면 부드러운 스크롤이
+    // 됩니다. 페이지 진입 시에는 곧바로 자리를 잡아야 하므로 "instant" 로 덮어씁니다.
+    target.scrollIntoView({ behavior: smooth ? "smooth" : "instant", block: "start" });
+  }
+
+  /** 처음 진입할 때의 해시 이동.
+   *  웹폰트(Pretendard)가 CDN에서 늦게 도착하면 줄 높이가 바뀌면서 목표 위치가
+   *  밀립니다. 그래서 렌더 직후 · 폰트 로드 후 · 한 박자 뒤 세 번 맞춥니다. */
+  function settleScrollToHash() {
+    if (!location.hash) return;
+    requestAnimationFrame(function () { scrollToHash(false); });
+    if (document.fonts && document.fonts.ready && document.fonts.ready.then) {
+      document.fonts.ready.then(function () { scrollToHash(false); });
+    }
+    setTimeout(function () { scrollToHash(false); }, 400);
+  }
+
   /* ---------- reveal ------------------------------------------------------ */
 
   function observeReveal() {
@@ -1001,6 +1034,11 @@
         if (pageName === "archive") applyHash(false);
         if (pageName === "publications") applyPubHash();
         render();
+        if (pageName === "about") {
+          // 홈의 '연구 범위' 항목에서 넘어온 경우 해당 위치로 이동
+          settleScrollToHash();
+          window.addEventListener("hashchange", function () { scrollToHash(true); });
+        }
         if (pageName === "publications") {
           window.addEventListener("hashchange", function () {
             if (applyPubHash()) renderPublications();
