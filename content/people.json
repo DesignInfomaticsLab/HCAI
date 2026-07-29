@@ -8,7 +8,7 @@
     { "id": "director",     "label": { "ko": "연구소장",     "en": "Director" } },
     { "id": "member",       "label": { "ko": "연구원",       "en": "Researchers" } },
     { "id": "staff",        "label": { "ko": "행정",         "en": "Staff" } },
-    { "id": "collaborator", "label": { "ko": "협력 연구진",  "en": "Collaborators" } },
+    { "id": "collaborator", "label": { "ko": "협력 연구진",  "en": "Collaborators" }, "alwaysShow": true },
     { "id": "alumni",       "label": { "ko": "거쳐 간 사람들", "en": "Alumni" } }
   ],
 
@@ -141,72 +141,6 @@
       "bio": { "ko": "", "en": "" },
       "photo": "assets/img/people/kim-kayoung.jpg",
       "links": [],
-      "since": ""
-    },
-
-    {
-      "id": "kim-hwan",
-      "group": "collaborator",
-      "name": { "ko": "김환", "en": "Hwan Kim" },
-      "role": { "ko": "교수", "en": "Assistant Professor" },
-      "affiliation": { "ko": "성신여자대학교 서비스·디자인공학과", "en": "Dept. of Service and Design Engineering, Sungshin Women's University" },
-      "email": "",
-      "keywords": [],
-      "bio": { "ko": "", "en": "" },
-      "photo": "",
-      "links": [],
-      "since": ""
-    },
-    {
-      "id": "park-hyoungjune",
-      "group": "collaborator",
-      "name": { "ko": "박형준", "en": "Hyoung-June Park" },
-      "role": { "ko": "교수", "en": "Associate Professor" },
-      "affiliation": { "ko": "하와이대학교 마노아 건축대학", "en": "School of Architecture, University of Hawaiʻi at Mānoa" },
-      "email": "",
-      "keywords": [],
-      "bio": { "ko": "", "en": "" },
-      "photo": "",
-      "links": [],
-      "since": ""
-    },
-    {
-      "id": "ban-seonghoon",
-      "group": "collaborator",
-      "name": { "ko": "반성훈", "en": "Seonghoon Ban" },
-      "role": { "ko": "대표", "en": "CEO" },
-      "affiliation": { "ko": "주식회사 리콘랩스", "en": "Recon Labs Inc." },
-      "email": "",
-      "keywords": [],
-      "bio": { "ko": "", "en": "" },
-      "photo": "",
-      "links": [{ "label": "Web", "url": "https://reconlabs.ai/" }],
-      "since": ""
-    },
-    {
-      "id": "roger-blanco",
-      "group": "collaborator",
-      "name": { "ko": "Roger Blanco i Ribera", "en": "Roger Blanco i Ribera" },
-      "role": { "ko": "연구원", "en": "Research Scientist" },
-      "affiliation": { "ko": "NVIDIA", "en": "NVIDIA" },
-      "email": "",
-      "keywords": [],
-      "bio": { "ko": "", "en": "" },
-      "photo": "",
-      "links": [{ "label": "Web", "url": "https://www.nvidia.com/" }],
-      "since": ""
-    },
-    {
-      "id": "sung-minhyuk",
-      "group": "collaborator",
-      "name": { "ko": "성민혁", "en": "Minhyuk Sung" },
-      "role": { "ko": "교수", "en": "Associate Professor" },
-      "affiliation": { "ko": "한국과학기술원(KAIST) 전산학부", "en": "School of Computing, KAIST" },
-      "email": "",
-      "keywords": [],
-      "bio": { "ko": "", "en": "" },
-      "photo": "",
-      "links": [{ "label": "Web", "url": "https://mhsung.github.io/" }],
       "since": ""
     },
 

@@ -639,6 +639,13 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .people__group + .people__group { margin-top: clamp(3rem, 6vw, 5rem); }
 
+/* 아직 채우지 않은 그룹 — 제목만 세워 두고 자리를 표시합니다 */
+.people__pending {
+  padding-block: clamp(1.5rem, 3vw, 2.25rem);
+  font-size: var(--fs-sm);
+  color: var(--fg-faint);
+}
+
 .person { display: flex; flex-direction: column; gap: 0.875rem; }
 
 /* 제공되는 인물 사진이 3:4 세로라 그 비율 그대로 씁니다 — 얼굴이 잘리지 않습니다 */

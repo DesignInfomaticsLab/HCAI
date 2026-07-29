@@ -47,6 +47,7 @@
     seeArchive:   { ko: "연구 · 활동 · 뉴스 전체 보기", en: "Browse all records" },
     sitemap:      { ko: "바로가기", en: "Sitemap" },
     empty:        { ko: "아직 등록된 항목이 없습니다", en: "Nothing here yet" },
+    preparing:    { ko: "준비 중입니다", en: "Coming soon" },
     noResult:     { ko: "검색 결과가 없습니다", en: "No matching entries" },
     notFound:     { ko: "요청한 항목을 찾을 수 없습니다", en: "The requested entry was not found" },
     contact:      { ko: "연락처", en: "Contact" },
@@ -689,17 +690,23 @@
 
     var html = groups.map(function (g) {
       var list = members.filter(function (m) { return m.group === g.id; });
-      if (!list.length) return "";
+
+      // 비어 있는 그룹은 감춥니다. 다만 alwaysShow 가 켜져 있으면
+      // 제목만 남겨 두어 '자리는 있는데 아직 채우지 않았다'를 드러냅니다.
+      if (!list.length && !g.alwaysShow) return "";
+
       var isLead = g.id === "director" && list.length === 1;
       return (
         '<section class="people__group">' +
           '<div class="sechead">' +
             '<h2 class="sechead__title sechead__title--sm">' + esc(t(g.label)) + "</h2>" +
-            '<span class="sechead__aside">' + list.length + "</span>" +
+            (list.length ? '<span class="sechead__aside">' + list.length + "</span>" : "") +
           "</div>" +
-          (isLead
-            ? personCard(list[0], true)
-            : '<div class="grid grid--4">' + list.map(function (m) { return personCard(m); }).join("") + "</div>") +
+          (!list.length
+            ? '<p class="people__pending">' + esc(t(UI.preparing)) + "</p>"
+            : isLead
+              ? personCard(list[0], true)
+              : '<div class="grid grid--4">' + list.map(function (m) { return personCard(m); }).join("") + "</div>") +
         "</section>"
       );
     }).join("");
