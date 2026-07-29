@@ -43,9 +43,17 @@
 `archive.html#research`, `archive.html#activities`, `publications.html#patent` 처럼
 해시를 붙이면 해당 분류가 걸린 채 열립니다.
 
-> ⚠️ **CSS·JS를 고쳤는데 화면이 안 바뀌면** 브라우저 캐시입니다.
-> `Ctrl+Shift+R` 로 강력 새로고침하거나, HTML 안의 `?v=3` 숫자를 올리세요.
-> 배포 시에도 이 숫자를 올려야 방문자가 옛 화면을 보지 않습니다.
+> ⚠️ **CSS·JS를 고쳤으면 HTML 안의 `?v=` 숫자를 반드시 올리세요.** (현재 `?v=4`)
+> 안 올리면 브라우저가 예전 파일을 계속 씁니다. 페이지마다 캐시가 갱신되는 시점이 달라서
+> **어떤 탭은 새 화면, 어떤 탭은 옛 화면**이 되는 증상이 나옵니다.
+> 급할 때는 `Ctrl+Shift+R` 로 강력 새로고침하면 됩니다.
+>
+> 한 번에 바꾸려면 프로젝트 폴더에서:
+> ```powershell
+> Get-ChildItem *.html | ForEach-Object {
+>   (Get-Content $_ -Raw) -replace '\?v=\d+', '?v=5' | Set-Content $_ -Encoding utf8
+> }
+> ```
 
 ---
 
@@ -76,11 +84,13 @@ HCAI_homepage/
 │       ├── people/             연구원 사진
 │       ├── projects/<id>/      프로젝트 이미지
 │       ├── activities/<날짜-id>/ 활동 사진 · 포스터
-│       └── favicon.svg
+│       └── favicon-16/32/180/512.png
 │
-├── tools/logo/                 로고 생성·조정 도구 (사이트에 로드되지 않음)
-│   ├── hcai-dot-logo-v2.html   파라미터 슬라이더 + PNG/SVG/영상 내보내기
-│   └── source/*.mp4            렌더 원본
+├── tools/                      제작용 도구 (사이트에 로드되지 않음)
+│   ├── logo/
+│   │   ├── hcai-dot-logo-v2.html  파라미터 슬라이더 + PNG/SVG/영상 내보내기
+│   │   └── source/*.mp4           렌더 원본
+│   └── favicon/make-favicon.ps1   파비콘 재생성 (색·굵기 바꿀 때)
 │
 ├── docs/                       운영 가이드
 ├── preview.bat                 로컬 미리보기 실행
