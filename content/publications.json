@@ -1,29 +1,253 @@
 {
-  "_comment": "논문 · 특허 · 수상 성과 아카이브. 새 항목은 items 배열 맨 위에 추가하세요(최신순). type 은 아래 types 의 id 중 하나입니다. project 에 projects.json 의 id 를 적으면 해당 프로젝트 성과로 연결됩니다.",
+  "_comment": "연구 성과. 논문(paper) 과 특허(patent) 두 갈래입니다. 디자인권도 특허 안에 들어가고 kind 로 구분합니다.",
+  "_sortNote": "화면 정렬은 date 기준 최신순으로 자동 처리됩니다. 배열 순서는 신경 쓰지 않아도 됩니다.",
+  "_privacyNote": "기여율·과제 번호·사업자등록번호 등 대외 공개가 부적절한 항목은 담지 않습니다. 넣지 마세요.",
+  "_doiNote": "doi 가 비어 있는 항목은 확인되는 대로 채워 주세요. 추정해서 넣으면 엉뚱한 논문으로 연결됩니다.",
 
   "types": [
-    { "id": "journal",    "label": { "ko": "학술지 논문", "en": "Journal" } },
-    { "id": "conference", "label": { "ko": "학술대회",   "en": "Conference" } },
-    { "id": "patent",     "label": { "ko": "특허",       "en": "Patent" } },
-    { "id": "award",      "label": { "ko": "수상",       "en": "Award" } },
-    { "id": "book",       "label": { "ko": "저서",       "en": "Book" } }
+    { "id": "paper",  "label": { "ko": "논문", "en": "Papers" } },
+    { "id": "patent", "label": { "ko": "특허", "en": "Patents" } }
+  ],
+
+  "kinds": [
+    { "id": "patent", "label": { "ko": "특허",     "en": "Patent" } },
+    { "id": "design", "label": { "ko": "디자인권", "en": "Design Right" } }
   ],
 
   "items": [
     {
-      "id": "example-publication-2025",
-      "type": "conference",
-      "year": "2025",
-      "authors": "Hong, G., Hyun, K.",
-      "title": {
-        "ko": "예시 항목 — 실제 성과가 나오면 이 항목을 지우고 채워 넣으세요",
-        "en": "Example entry — replace this once a real publication is added"
-      },
-      "venue": "Proceedings of Example Conference",
-      "project": "designer-centered-ai-design-pipeline",
-      "doi": "",
-      "url": "",
-      "note": { "ko": "", "en": "" }
+      "id": "2026-aei-design-lora",
+      "type": "paper",
+      "title": "Design LoRA: Interactive fine-tuning of text-to-image models with designer-in-the-loop feedback",
+      "authors": "Seung Won Lee, Yejin Yun, Kyung Hoon Hyun",
+      "venue": "Advanced Engineering Informatics, 76(1)",
+      "publisher": "Elsevier",
+      "index": "SCIE",
+      "date": "2026-11-01",
+      "doi": "https://doi.org/10.1016/j.aei.2026.105053"
+    },
+    {
+      "id": "2026-adr-workflow-net",
+      "type": "paper",
+      "title": "Workflow-Net: Toward Understanding Designer Workflows in Generative AI-Driven Systems through Comparing Node- and Prompt-Based Interfaces",
+      "authors": "Tae Hee Jo, Jiin Choi, Semin Jin, Seung Won Lee, Yugyeong Jang, Sangwoon Park, Seonghoon Ban, Kyung Hoon Hyun",
+      "venue": "Archives of Design Research, 39(2)",
+      "publisher": "Korea Society of Design Science",
+      "index": "SCOPUS",
+      "date": "2026-05-31",
+      "doi": ""
+    },
+    {
+      "id": "2026-chi-ea-sequential-design-actions",
+      "type": "paper",
+      "title": "Modeling Sequential Design Actions as Designer Externalization on an Infinite Canvas",
+      "authors": "Yejin Yun, Seung Won Lee, Jiin Choi, Kyung Hoon Hyun",
+      "venue": "ACM CHI EA '26: Extended Abstracts of the CHI Conference on Human Factors in Computing Systems",
+      "publisher": "ACM",
+      "index": "SCI",
+      "date": "2026-04-13",
+      "doi": ""
+    },
+    {
+      "id": "2026-chi-ea-behavior-aware-scene",
+      "type": "paper",
+      "title": "Behavior-Aware Anthropometric Scene Generation for Human-Usable 3D Layouts",
+      "authors": "Semin Jin, Donghyuk Kim, Jeongmin Ryu, Kyung Hoon Hyun",
+      "venue": "ACM CHI EA '26: Extended Abstracts of the CHI Conference on Human Factors in Computing Systems",
+      "publisher": "ACM",
+      "index": "SCI",
+      "date": "2026-04-13",
+      "doi": ""
+    },
+    {
+      "id": "2026-cra-color-compatibility",
+      "type": "paper",
+      "title": "Blending Designer Insights with Predicted Crowd-based Color Compatibility in Interior Color Design",
+      "authors": "Semin Jin, Kyung Hoon Hyun",
+      "venue": "Color Research and Application, 51(2)",
+      "publisher": "Wiley",
+      "index": "SCIE",
+      "date": "2026-03-01",
+      "doi": ""
+    },
+    {
+      "id": "2026-autcon-3d-indoor-layout",
+      "type": "paper",
+      "title": "Human-Operational 3D Indoor Layout Generation with LLM-Driven Anthropometric Simulation",
+      "authors": "Semin Jin, Kyung Hoon Hyun",
+      "venue": "Automation in Construction, 184",
+      "publisher": "Elsevier",
+      "index": "SCIE",
+      "date": "2026-02-16",
+      "doi": "https://doi.org/10.1016/j.autcon.2026.106846"
+    },
+    {
+      "id": "2026-scirep-part-level-3d-shape",
+      "type": "paper",
+      "title": "Part-Level 3D Shape Generation Driven by User Intention Inference with Preferential Bayesian Optimization",
+      "authors": "Seung Won Lee, Jiin Choi, Kyung Hoon Hyun",
+      "venue": "Scientific Reports, 16",
+      "publisher": "Springer Nature",
+      "index": "SCIE",
+      "date": "2026-02-07",
+      "doi": ""
+    },
+
+    {
+      "id": "patent-2026-06-19-anthropometric-furniture-layout",
+      "type": "patent",
+      "kind": "patent",
+      "title": { "ko": "대규모 언어 모델 기반 인체측정학적 시뮬레이션을 활용한 3차원 실내 가구 배치 생성 방법 및 장치", "en": "" },
+      "inventors": { "ko": "현경훈, 진세민", "en": "Kyung Hoon Hyun, Semin Jin" },
+      "country": "KR",
+      "filed": "2026-06-19",
+      "filingNo": "10-2026-0112105",
+      "registered": "",
+      "registrationNo": "",
+      "date": "2026-06-19"
+    },
+    {
+      "id": "design-2026-04-23-multi-agent-dialogue",
+      "type": "patent",
+      "kind": "design",
+      "title": { "ko": "다중 에이전트 기반 창의적 디자인 대화 구조화 및 시각화 시스템", "en": "" },
+      "inventors": { "ko": "진세민, 현경훈, 이승원", "en": "Semin Jin, Kyung Hoon Hyun, Seung Won Lee" },
+      "country": "KR",
+      "filed": "2026-02-03",
+      "filingNo": "30-2026-0004673",
+      "registered": "2026-04-23",
+      "registrationNo": "30-1348144",
+      "date": "2026-04-23"
+    },
+    {
+      "id": "design-2026-04-21-context-aware-product-image",
+      "type": "patent",
+      "kind": "design",
+      "title": { "ko": "사용자 의도 기반 맥락 반영형 제품 이미지 생성 시스템 및 방법", "en": "" },
+      "inventors": { "ko": "최지인, 현경훈, 장유경", "en": "Jiin Choi, Kyung Hoon Hyun, Yugyeong Jang" },
+      "country": "KR",
+      "filed": "2026-02-03",
+      "filingNo": "30-2026-0004671",
+      "registered": "2026-04-21",
+      "registrationNo": "",
+      "date": "2026-04-21"
+    },
+    {
+      "id": "design-2026-04-21-designer-in-the-loop-finetuning",
+      "type": "patent",
+      "kind": "design",
+      "title": { "ko": "디자이너-인-더-루프 피드백을 통한 텍스트-이미지 모델의 인터랙티브 파인튜닝 시스템", "en": "" },
+      "inventors": { "ko": "이승원, 현경훈", "en": "Seung Won Lee, Kyung Hoon Hyun" },
+      "country": "KR",
+      "filed": "2026-02-03",
+      "filingNo": "30-2026-0004672",
+      "registered": "2026-04-21",
+      "registrationNo": "",
+      "date": "2026-04-21"
+    },
+    {
+      "id": "design-2026-04-21-visual-attribute-knowledge-graph",
+      "type": "patent",
+      "kind": "design",
+      "title": { "ko": "시각 속성 지식그래프 기반 개인화 디자인 생성 시스템 및 그 방법", "en": "" },
+      "inventors": { "ko": "최지인, 현경훈", "en": "Jiin Choi, Kyung Hoon Hyun" },
+      "country": "KR",
+      "filed": "2026-02-03",
+      "filingNo": "30-2026-0004674",
+      "registered": "2026-04-21",
+      "registrationNo": "",
+      "date": "2026-04-21"
+    },
+    {
+      "id": "patent-2026-04-21-context-aware-product-image",
+      "type": "patent",
+      "kind": "patent",
+      "title": { "ko": "사용자 의도 기반 맥락 반영형 제품 이미지 생성 시스템 및 방법", "en": "" },
+      "inventors": { "ko": "현경훈, 최지인, 장유경", "en": "Kyung Hoon Hyun, Jiin Choi, Yugyeong Jang" },
+      "country": "KR",
+      "filed": "2026-02-23",
+      "filingNo": "10-2026-0033081",
+      "registered": "2026-04-21",
+      "registrationNo": "10-2957285",
+      "date": "2026-04-21"
+    },
+    {
+      "id": "patent-2026-03-06-behavior-aware-3d-space",
+      "type": "patent",
+      "kind": "patent",
+      "title": { "ko": "인체측정 데이터 기반 행동 인식형 3차원 실내 공간 자동 생성 및 사용성 검증 시스템", "en": "" },
+      "inventors": { "ko": "현경훈, 진세민, 김동혁", "en": "Kyung Hoon Hyun, Semin Jin, Donghyuk Kim" },
+      "country": "KR",
+      "filed": "2026-03-06",
+      "filingNo": "10-2026-0040371",
+      "registered": "",
+      "registrationNo": "",
+      "date": "2026-03-06"
+    },
+    {
+      "id": "patent-2026-02-27-multi-agent-idea-structuring",
+      "type": "patent",
+      "kind": "patent",
+      "title": { "ko": "다중 에이전트를 기반으로 창의적 아이디어를 구조화하고 시각화하는 시스템 및 방법", "en": "" },
+      "inventors": { "ko": "현경훈, 진세민, 이승원", "en": "Kyung Hoon Hyun, Semin Jin, Seung Won Lee" },
+      "country": "KR",
+      "filed": "2026-02-27",
+      "filingNo": "10-2026-0036677",
+      "registered": "",
+      "registrationNo": "",
+      "date": "2026-02-27"
+    },
+    {
+      "id": "patent-2026-02-13-realtime-personalization",
+      "type": "patent",
+      "kind": "patent",
+      "title": { "ko": "텍스트-이미지 생성 모델을 실시간으로 개인화하는 시스템 및 방법", "en": "" },
+      "inventors": { "ko": "이승원, 현경훈", "en": "Seung Won Lee, Kyung Hoon Hyun" },
+      "country": "KR",
+      "filed": "2026-02-13",
+      "filingNo": "10-2026-0029571",
+      "registered": "",
+      "registrationNo": "",
+      "date": "2026-02-13"
+    },
+    {
+      "id": "patent-2025-12-30-visual-attribute-knowledge-graph",
+      "type": "patent",
+      "kind": "patent",
+      "title": { "ko": "시각 속성 지식그래프 기반 개인화 디자인 생성 시스템 및 그 방법", "en": "" },
+      "inventors": { "ko": "최지인, 현경훈", "en": "Jiin Choi, Kyung Hoon Hyun" },
+      "country": "KR",
+      "filed": "2025-12-30",
+      "filingNo": "10-2025-0215047",
+      "registered": "",
+      "registrationNo": "",
+      "date": "2025-12-30"
+    },
+    {
+      "id": "patent-2025-11-28-workflow-analysis",
+      "type": "patent",
+      "kind": "patent",
+      "title": { "ko": "대규모 언어 모델 기반 다중 사용자의 행동 중심 디자인 과정 워크플로우 분석 시스템 및 그 방법", "en": "" },
+      "inventors": { "ko": "현경훈, 조태희, 최지인, 이승원", "en": "Kyung Hoon Hyun, Tae Hee Jo, Jiin Choi, Seung Won Lee" },
+      "country": "KR",
+      "filed": "2025-11-28",
+      "filingNo": "10-2025-0184961",
+      "registered": "",
+      "registrationNo": "",
+      "date": "2025-11-28"
+    },
+    {
+      "id": "patent-2025-11-28-design-artifact-image-generation",
+      "type": "patent",
+      "kind": "patent",
+      "title": { "ko": "멀티모달 디자인 아티팩트의 시각적 관리 인터페이스 및 다중 에이전트 해석 기반 아티팩트 그룹화 및 이미지 생성 시스템과 그 방법", "en": "" },
+      "inventors": { "ko": "현경훈, 이승원, 최지인, 진세민", "en": "Kyung Hoon Hyun, Seung Won Lee, Jiin Choi, Semin Jin" },
+      "country": "KR",
+      "filed": "2025-11-28",
+      "filingNo": "10-2025-0184966",
+      "registered": "",
+      "registrationNo": "",
+      "date": "2025-11-28"
     }
   ]
 }

@@ -477,6 +477,21 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 .index__note { color: var(--fg-dim); font-size: var(--fs-xs); line-height: 1.5; }
 
+/* 링크가 없는 행 (DOI 미등록 논문, 특허 등) — 호버 반응을 끕니다 */
+.index__row--static { cursor: default; }
+.index__row--static:hover::before { opacity: 0; }
+.index__row--static:hover .index__title { color: inherit; }
+
+/* 연구 성과 행의 저자·학술지 줄 */
+.pub__authors {
+  display: block; margin-top: 0.5rem;
+  font-size: var(--fs-sm); color: var(--fg-mid); line-height: 1.5;
+}
+.pub__venue {
+  display: block; margin-top: 0.25rem;
+  font-size: var(--fs-xs); color: var(--fg-dim); line-height: 1.5;
+}
+
 .index__arrow {
   justify-self: end;
   font-family: var(--font-mono);
@@ -638,6 +653,21 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* 9. People ============================================================== */
 
 .people__group + .people__group { margin-top: clamp(3rem, 6vw, 5rem); }
+
+/* Alumni — 얼굴 없이 이름·직함만 담는 촘촘한 목록 */
+.alumnilist {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+  gap: 0 clamp(1.5rem, 4vw, 3rem);
+}
+.alumnilist__item {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+  padding-block: 0.875rem;
+  border-bottom: 1px solid var(--line);
+}
+.alumnilist__name { font-size: 1rem; font-weight: 500; letter-spacing: -0.02em; }
+.alumnilist__name span { color: var(--fg-dim); font-weight: 400; font-size: var(--fs-sm); margin-left: 0.5rem; }
+.alumnilist__role { font-size: var(--fs-sm); color: var(--fg-dim); white-space: nowrap; }
 
 /* 아직 채우지 않은 그룹 — 제목만 세워 두고 자리를 표시합니다 */
 .people__pending {

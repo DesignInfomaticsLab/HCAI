@@ -16,8 +16,8 @@
       "id": "2026-07-08-hcai-seminar",
       "category": "seminar",
       "date": "2026-07-08",
-      "title": { "ko": "HCAI Seminar", "en": "HCAI Seminar" },
-      "place": { "ko": "한양대학교", "en": "Hanyang University" },
+      "title": { "ko": "2026 HCAI Seminar", "en": "2026 HCAI Seminar" },
+      "place": { "ko": "한양대학교 생활과학관 504호", "en": "Room 504, College of Human Ecology, Hanyang University" },
       "cover": "",
       "summary": {
         "ko": "인간-중심 AI 기술과 디자인의 미래를 주제로 한 발표 세미나를 개최합니다.",
@@ -26,11 +26,41 @@
       "body": {
         "ko": [
           "인간-중심 AI 기술과 디자인의 미래를 주제로 한 발표 세미나를 개최합니다. North Carolina State University의 Prof. Byungsoo Kim과 Carnegie Mellon University의 Prof. Haeyoung Kim이 「Human-Centered Interactions with Emerging Technologies: From AI Co-Creation to Physical–Digital Experience」 발표를 시작으로, AI 시대의 디자인 워크플로우 재정의와 인간-중심 상호작용을 주제로 한 연구진들의 발표가 이어집니다. 기술과 인간의 창의적 협업이 만들어갈 새로운 디자인 경험을 함께 살펴보는 자리입니다.",
-          "![HCAI Seminar 포스터](assets/img/activities/2026-07-08-hcai-seminar/poster.jpg)"
+          "## 일시 · 장소",
+          "- 2026년 7월 8일(수) 13:00",
+          "- 한양대학교 생활과학관 504호 (서울시 성동구 왕십리로 222)",
+          "## Session 1 — Keynote",
+          "- **13:00 – 15:00** · Prof. Byungsoo Kim (NCSU), Prof. Haeyoung Kim (CMU) — Human-Centered Interactions with Emerging Technologies: From AI Co-Creation to Physical–Digital Experience",
+          "- **15:00 – 15:10** · Prof. Kyung Hoon Hyun (HYU) — Designing with AI: Redefining Design Workflows",
+          "## Session 2 — Consortium",
+          "- **15:10 – 15:30** · Seung Won Lee (HYU) — Design Behavior Modeling for Guiding Design Process",
+          "- **15:30 – 15:50** · Semin Jin (HYU) — Human-Centered Evaluation for Generative Spatial Design",
+          "- **15:50 – 16:10** · Jiin Choi (HYU) — Supporting Cognitive Indeterminacy in Human-AI Design",
+          "## Keynote 연사",
+          "- **Prof. Byungsoo Kim** — Assistant Professor, College of Design, North Carolina State University",
+          "- **Prof. Haeyoung Kim** — Assistant Professor, School of Design, Carnegie Mellon University",
+          "## 참여 기관",
+          "- 한양대학교 인간-중심 AI디자인 연구센터 · North Carolina State University · Carnegie Mellon University",
+          "![2026 HCAI Seminar 포스터](assets/img/activities/2026-07-08-hcai-seminar/poster.jpg)"
         ],
         "en": [
-          "A seminar on human-centered AI technology and the future of design. Opening with a talk by Prof. Byungsoo Kim (North Carolina State University) and Prof. Haeyoung Kim (Carnegie Mellon University) on “Human-Centered Interactions with Emerging Technologies: From AI Co-Creation to Physical–Digital Experience,” the program continues with presentations on redefining design workflows in the age of AI and on human-centered interaction. Together we look at the new design experiences that creative collaboration between technology and people can bring about.",
-          "![HCAI Seminar poster](assets/img/activities/2026-07-08-hcai-seminar/poster.jpg)"
+          "A seminar on human-centered AI technology and the future of design. Opening with a talk by Prof. Byungsoo Kim (North Carolina State University) and Prof. Haeyoung Kim (Carnegie Mellon University) on “Human-Centered Interactions with Emerging Technologies: From AI Co-Creation to Physical–Digital Experience,” the program continues with presentations on redefining design workflows in the age of AI and on human-centered interaction.",
+          "## Date · Venue",
+          "- 8 July 2026 (Wed), 13:00",
+          "- Room 504, College of Human Ecology, Hanyang University, 222 Wangsimni-ro, Seongdong-gu, Seoul",
+          "## Session 1 — Keynote",
+          "- **13:00 – 15:00** · Prof. Byungsoo Kim (NCSU), Prof. Haeyoung Kim (CMU) — Human-Centered Interactions with Emerging Technologies: From AI Co-Creation to Physical–Digital Experience",
+          "- **15:00 – 15:10** · Prof. Kyung Hoon Hyun (HYU) — Designing with AI: Redefining Design Workflows",
+          "## Session 2 — Consortium",
+          "- **15:10 – 15:30** · Seung Won Lee (HYU) — Design Behavior Modeling for Guiding Design Process",
+          "- **15:30 – 15:50** · Semin Jin (HYU) — Human-Centered Evaluation for Generative Spatial Design",
+          "- **15:50 – 16:10** · Jiin Choi (HYU) — Supporting Cognitive Indeterminacy in Human-AI Design",
+          "## Keynote Speakers",
+          "- **Prof. Byungsoo Kim** — Assistant Professor, College of Design, North Carolina State University",
+          "- **Prof. Haeyoung Kim** — Assistant Professor, School of Design, Carnegie Mellon University",
+          "## Participating Institutions",
+          "- Human-Centered AI Design Institute, Hanyang University · North Carolina State University · Carnegie Mellon University",
+          "![2026 HCAI Seminar poster](assets/img/activities/2026-07-08-hcai-seminar/poster.jpg)"
         ]
       },
       "gallery": [],

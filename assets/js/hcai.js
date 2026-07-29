@@ -370,6 +370,17 @@
     );
   }
 
+  function alumniRow(m) {
+    var other = lang === "ko" ? (m.name.en || "") : (m.name.ko || "");
+    return (
+      '<div class="alumnilist__item">' +
+        '<span class="alumnilist__name">' + esc(t(m.name)) +
+          (other ? "<span>" + esc(other) + "</span>" : "") + "</span>" +
+        (t(m.role) ? '<span class="alumnilist__role">' + esc(t(m.role)) + "</span>" : "") +
+      "</div>"
+    );
+  }
+
   /* ---------- 통합 아카이브 ----------------------------------------------- */
 
   /* 네비게이션 해시 ↔ 필터 값 */
@@ -411,20 +422,7 @@
       });
     });
 
-    (data.publications.items || []).forEach(function (p) {
-      out.push({
-        kind: "publication",
-        sort: p.year || "",
-        date: p.year || "",
-        title: t(p.title),
-        desc: [p.authors, p.venue].filter(Boolean).join(" · "),
-        badge: pubTypeLabel(p.type),
-        note: "",
-        tags: p.type,
-        href: p.url || p.doi || ""
-      });
-    });
-
+    // 연구 성과는 별도 페이지(publications.html)에서 다루므로 여기 섞지 않습니다
     return out.sort(function (a, b) { return String(b.sort).localeCompare(String(a.sort)); });
   }
 
@@ -453,8 +451,7 @@
     var kinds = [
       { id: "all", label: t(UI.all) },
       { id: "project", label: t(UI.research) },
-      { id: "activity", label: t(UI.activities) },
-      { id: "publication", label: t(UI.publications) }
+      { id: "activity", label: t(UI.activities) }
     ];
 
     var chips = kinds.map(function (c) {
@@ -638,6 +635,125 @@
       "</div>";
   }
 
+  /* ---------- 페이지: 연구 성과 ------------------------------------------- */
+
+  var pubFilter = "paper";
+
+  function pubKindLabel(id) {
+    var found = ((data.publications && data.publications.kinds) || [])
+      .filter(function (k) { return k.id === id; })[0];
+    return found ? t(found.label) : id;
+  }
+
+  /** 논문 한 줄 — 제목 · 저자 · 학술지 · 색인 배지 · DOI */
+  function paperRow(p) {
+    var link = p.doi || p.url || "";
+    var meta =
+      (p.index ? '<span class="badge">' + esc(p.index) + "</span>" : "") +
+      (p.publisher ? ' <span class="index__note">' + esc(p.publisher) + "</span>" : "");
+
+    var body =
+      '<span class="index__date">' + esc(fmtDate(p.date)) + "</span>" +
+      '<span class="index__body">' +
+        '<span class="index__title">' + esc(t(p.title)) + "</span>" +
+        (p.authors ? '<span class="pub__authors">' + esc(p.authors) + "</span>" : "") +
+        (p.venue ? '<span class="pub__venue">' + esc(p.venue) + "</span>" : "") +
+      "</span>" +
+      '<span class="index__meta">' + meta + "</span>" +
+      '<span class="index__arrow" aria-hidden="true">' + (link ? "→" : "") + "</span>";
+
+    return link
+      ? '<a class="index__row" href="' + esc(link) + '" target="_blank" rel="noopener noreferrer">' + body + "</a>"
+      : '<div class="index__row index__row--static">' + body + "</div>";
+  }
+
+  /** 특허 · 디자인권 한 줄 — 제목 · 발명자 · 출원/등록 정보 */
+  function patentRow(p) {
+    var reg = [];
+    if (p.filed) reg.push((lang === "ko" ? "출원 " : "Filed ") + fmtDate(p.filed) + (p.filingNo ? " · " + p.filingNo : ""));
+    if (p.registered) reg.push((lang === "ko" ? "등록 " : "Registered ") + fmtDate(p.registered) + (p.registrationNo ? " · " + p.registrationNo : ""));
+
+    return (
+      '<div class="index__row index__row--static">' +
+        '<span class="index__date">' + esc(fmtDate(p.date)) + "</span>" +
+        '<span class="index__body">' +
+          '<span class="index__title">' + esc(t(p.title)) + "</span>" +
+          (t(p.inventors) ? '<span class="pub__authors">' + esc(t(p.inventors)) + "</span>" : "") +
+          (reg.length ? '<span class="pub__venue">' + esc(reg.join("  |  ")) + "</span>" : "") +
+        "</span>" +
+        '<span class="index__meta">' +
+          '<span class="badge' + (p.kind === "design" ? " badge--done" : "") + '">' + esc(pubKindLabel(p.kind)) + "</span>" +
+          (p.country ? ' <span class="index__note">' + esc(p.country) + "</span>" : "") +
+        "</span>" +
+        '<span class="index__arrow" aria-hidden="true"></span>' +
+      "</div>"
+    );
+  }
+
+  function renderPublications() {
+    var host = el("#publications-list");
+    if (!host) return;
+
+    var items = (data.publications.items || []).slice()
+      .sort(function (a, b) { return String(b.date || "").localeCompare(String(a.date || "")); });
+
+    var shown = items.filter(function (p) { return p.type === pubFilter; });
+
+    var chips = (data.publications.types || []).map(function (c) {
+      var n = items.filter(function (p) { return p.type === c.id; }).length;
+      return '<button class="chip" type="button" data-pubtype="' + c.id +
+             '" aria-pressed="' + (pubFilter === c.id) + '">' + esc(t(c.label)) + " " + n + "</button>";
+    }).join("");
+
+    // 연도별 묶음
+    var byYear = {}, years = [];
+    shown.forEach(function (p) {
+      var y = year(p.date) || "—";
+      if (!byYear[y]) { byYear[y] = []; years.push(y); }
+      byYear[y].push(p);
+    });
+    years.sort().reverse();
+
+    var listHtml = years.map(function (y) {
+      return (
+        '<section class="yeargroup">' +
+          '<div class="yeargroup__head">' +
+            '<h3 class="yeargroup__year">' + esc(y) + "</h3>" +
+            '<span class="yeargroup__count">' + byYear[y].length + "</span>" +
+          "</div>" +
+          '<div class="index">' +
+            byYear[y].map(function (p) {
+              return p.type === "patent" ? patentRow(p) : paperRow(p);
+            }).join("") +
+          "</div>" +
+        "</section>"
+      );
+    }).join("");
+
+    host.innerHTML =
+      '<div class="wrap">' +
+        '<div class="archivecount">' + shown.length + " " + esc(t(UI.resultCount)) + "</div>" +
+        '<div class="archivebar"><div class="filters">' + chips + "</div></div>" +
+        (shown.length ? listHtml : '<p class="empty">' + esc(t(UI.empty)) + "</p>") +
+      "</div>";
+
+    els("[data-pubtype]", host).forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        pubFilter = btn.getAttribute("data-pubtype");
+        setHash(pubFilter);          // publications.html#patent 로 바로 걸어 둘 수 있게
+        renderPublications();
+      });
+    });
+  }
+
+  /** publications.html#paper / #patent 로 들어온 경우 탭을 맞춥니다 */
+  function applyPubHash() {
+    var h = (location.hash || "").replace("#", "");
+    var valid = (data.publications.types || []).some(function (c) { return c.id === h; });
+    if (valid && h !== pubFilter) { pubFilter = h; return true; }
+    return false;
+  }
+
   /* ---------- 페이지: 소개 ----------------------------------------------- */
 
   function renderAbout() {
@@ -704,9 +820,12 @@
           "</div>" +
           (!list.length
             ? '<p class="people__pending">' + esc(t(UI.preparing)) + "</p>"
-            : isLead
-              ? personCard(list[0], true)
-              : '<div class="grid grid--4">' + list.map(function (m) { return personCard(m); }).join("") + "</div>") +
+            : g.hidePhoto
+              // 사진 없이 이름·직함만 — Alumni 처럼 얼굴을 싣지 않는 그룹
+              ? '<div class="alumnilist">' + list.map(alumniRow).join("") + "</div>"
+              : isLead
+                ? personCard(list[0], true)
+                : '<div class="grid grid--4">' + list.map(function (m) { return personCard(m); }).join("") + "</div>") +
         "</section>"
       );
     }).join("");
@@ -790,8 +909,8 @@
       ? '<div class="section--tight"><p class="rolelist__label">' + esc(t(UI.related)) + "</p>" +
         '<div class="index">' + pubs.map(function (p) {
           return rowHtml({
-            href: p.url || p.doi || "#",
-            date: p.year || "",
+            href: p.doi || p.url || "#",
+            date: fmtDate(p.date),
             title: t(p.title),
             desc: [p.authors, p.venue].filter(Boolean).join(" · "),
             meta: '<span class="badge badge--done">' + esc(pubTypeLabel(p.type)) + "</span>"
@@ -846,6 +965,7 @@
   var PAGES = {
     home: renderHome,
     archive: renderArchive,
+    publications: renderPublications,
     about: renderAbout,
     people: renderPeople,
     entry: renderEntry
@@ -862,11 +982,12 @@
   }
 
   var NEEDS = {
-    home:    ["site", "about", "projects", "activities", "publications"],
-    archive: ["site", "projects", "activities", "publications"],
-    about:   ["site", "about"],
-    people:  ["site", "people"],
-    entry:   ["site", "projects", "activities", "publications"]
+    home:         ["site", "about", "projects", "activities"],
+    archive:      ["site", "projects", "activities"],
+    publications: ["site", "publications"],
+    about:        ["site", "about"],
+    people:       ["site", "people"],
+    entry:        ["site", "projects", "activities", "publications"]
   };
 
   function init(opts) {
@@ -876,7 +997,13 @@
     load(NEEDS[pageName] || ["site"])
       .then(function () {
         if (pageName === "archive") applyHash(false);
+        if (pageName === "publications") applyPubHash();
         render();
+        if (pageName === "publications") {
+          window.addEventListener("hashchange", function () {
+            if (applyPubHash()) renderPublications();
+          });
+        }
         if (pageName === "archive") {
           // archive.html#research 처럼 필터를 지정해 들어온 경우
           window.addEventListener("hashchange", function () {

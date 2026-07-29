@@ -9,7 +9,7 @@
     { "id": "member",       "label": { "ko": "연구원",       "en": "Researchers" } },
     { "id": "staff",        "label": { "ko": "행정",         "en": "Staff" } },
     { "id": "collaborator", "label": { "ko": "협력 연구진",  "en": "Collaborators" }, "alwaysShow": true },
-    { "id": "alumni",       "label": { "ko": "거쳐 간 사람들", "en": "Alumni" } }
+    { "id": "alumni",       "label": { "ko": "Alumni", "en": "Alumni" }, "hidePhoto": true }
   ],
 
   "members": [
@@ -64,19 +64,6 @@
       "photo": "assets/img/people/choi-jiin.jpg",
       "links": [],
       "since": ""
-    },
-    {
-      "id": "jo-taehee",
-      "group": "member",
-      "name": { "ko": "조태희", "en": "Tae Hee Jo" },
-      "role": { "ko": "박사과정", "en": "Ph.D. Student" },
-      "affiliation": { "ko": "한양대학교 실내건축디자인학과", "en": "Dept. of Interior Architecture Design, Hanyang University" },
-      "email": "",
-      "keywords": [],
-      "bio": { "ko": "", "en": "" },
-      "photo": "",
-      "links": [],
-      "since": "2021"
     },
     {
       "id": "jang-yugyeong",
@@ -144,6 +131,19 @@
       "since": ""
     },
 
+    {
+      "id": "jo-taehee",
+      "group": "alumni",
+      "name": { "ko": "조태희", "en": "Tae Hee Jo" },
+      "role": { "ko": "박사과정", "en": "Ph.D. Student" },
+      "affiliation": { "ko": "한양대학교 실내건축디자인학과", "en": "Dept. of Interior Architecture Design, Hanyang University" },
+      "email": "",
+      "keywords": [],
+      "bio": { "ko": "", "en": "" },
+      "photo": "",
+      "links": [],
+      "since": "2021"
+    },
     {
       "id": "park-jeongmin",
       "group": "alumni",

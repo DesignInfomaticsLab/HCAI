@@ -195,45 +195,57 @@
     img.onload = function () {
       self.img = img;
       URL.revokeObjectURL(url);
-      self.resize();
 
-      if (self.isStatic || reducedMotion()) {
-        self.renderStatic();
-        var rt = null;
-        window.addEventListener("resize", function () {
-          clearTimeout(rt);
-          rt = setTimeout(function () { self.resize(); self.renderStatic(); }, 160);
-        });
-        return;
-      }
-
-      // 화면에 보일 때만 돌립니다
-      if ("IntersectionObserver" in window) {
-        var io = new IntersectionObserver(function (entries) {
-          entries.forEach(function (e) {
-            self.visible = e.isIntersecting;
-            if (self.visible) self.start(); else self.stop();
-          });
-        }, { threshold: 0.01 });
-        io.observe(self.canvas);
-      } else {
-        self.start();
-      }
-
-      if (self.interactive) self._bindPointer();
-
-      var t = null;
-      window.addEventListener("resize", function () {
-        clearTimeout(t);
-        t = setTimeout(function () {
-          self.resize();
-          if (!self.running) self.renderStatic();
-        }, 160);
-      });
+      // 레이아웃이 잡히기 전(폭 0)에 재면 엉뚱한 크기로 그려집니다.
+      // 폭이 잡힐 때까지 프레임을 넘기며 기다렸다가 시작합니다.
+      // — 이걸 안 하면 페이지마다 로고 모양이 달라집니다.
+      var tries = 0;
+      (function waitForLayout() {
+        if (!self.resize() && tries++ < 60) { requestAnimationFrame(waitForLayout); return; }
+        self._afterFirstLayout();
+      })();
     };
 
     img.onerror = function () { URL.revokeObjectURL(url); };
     img.src = url;
+  };
+
+  Logo.prototype._afterFirstLayout = function () {
+    var self = this;
+
+    // 요소 크기가 바뀌면(창 크기, 폰트 로딩 등) 다시 그립니다.
+    // resize() 안에서 실제 픽셀 크기가 그대로면 아무 일도 하지 않습니다.
+    if ("ResizeObserver" in window) {
+      var ro = new ResizeObserver(function () {
+        if (self.resize() && !self.running) self.renderStatic();
+      });
+      ro.observe(this.canvas);
+    } else {
+      var t = null;
+      window.addEventListener("resize", function () {
+        clearTimeout(t);
+        t = setTimeout(function () {
+          if (self.resize() && !self.running) self.renderStatic();
+        }, 160);
+      });
+    }
+
+    if (this.isStatic || reducedMotion()) { this.renderStatic(); return; }
+
+    // 화면에 보일 때만 돌립니다
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          self.visible = e.isIntersecting;
+          if (self.visible) self.start(); else self.stop();
+        });
+      }, { threshold: 0.01 });
+      io.observe(this.canvas);
+    } else {
+      this.start();
+    }
+
+    if (this.interactive) this._bindPointer();
   };
 
   Logo.prototype._bindPointer = function () {
@@ -256,24 +268,34 @@
 
   /* --- 크기 / 지오메트리 -------------------------------------------------- */
 
+  /** 캔버스를 실제 표시 크기에 맞춥니다.
+   *  @returns {boolean} 크기를 확정했으면 true, 아직 레이아웃 전(폭 0)이면 false */
   Logo.prototype.resize = function () {
-    if (!this.img) return;
+    if (!this.img) return false;
 
     var rect = this.canvas.getBoundingClientRect();
-    var cssW = rect.width || this.canvas.clientWidth || 600;
+    var cssW = rect.width || this.canvas.clientWidth || 0;
+    if (cssW <= 0) return false;          // 아직 레이아웃 전 — 호출자가 다시 시도합니다
+
     var dpr = Math.max(Math.min(window.devicePixelRatio || 1, this.maxDpr), this.superSample);
 
     // 여백 포함 전체 폭이 cssW*dpr 이 되도록 scale 을 역산
     var unitW = VIEW_W + PAD_UNITS;
-    this.scale = Math.max(1, (cssW * dpr) / unitW);
+    var scale = Math.max(1, (cssW * dpr) / unitW);
 
-    var pad = Math.round((PAD_BASE * this.scale) / BASE_SCALE);
-    var lw = Math.round(VIEW_W * this.scale);
-    var lh = Math.round(VIEW_H * this.scale);
+    var pad = Math.round((PAD_BASE * scale) / BASE_SCALE);
+    var lw = Math.round(VIEW_W * scale);
+    var lh = Math.round(VIEW_H * scale);
+    var w = lw + 2 * pad, h = lh + 2 * pad;
 
+    // 실제 픽셀 크기가 그대로면 다시 만들지 않습니다.
+    // (ResizeObserver 가 자주 불려도 비용이 들지 않게)
+    if (this.mask && w === this.canvas.width && h === this.canvas.height) return true;
+
+    this.scale = scale;
     this.pad = pad; this.logoW = lw; this.logoH = lh;
-    this.canvas.width = lw + 2 * pad;
-    this.canvas.height = lh + 2 * pad;
+    this.canvas.width = w;
+    this.canvas.height = h;
 
     var tmp = document.createElement("canvas");
     tmp.width = this.canvas.width; tmp.height = this.canvas.height;
@@ -294,6 +316,7 @@
     this._regenerateSources();
     this.geomKey = "";           // 지오메트리 캐시 무효화
     this._ensureGeometry(this.seq[this.stepIndex]);
+    return true;
   };
 
   Logo.prototype._regenerateSources = function () {

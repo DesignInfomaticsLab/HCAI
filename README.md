@@ -34,12 +34,14 @@
 | 페이지 | 파일 | 내용 |
 |---|---|---|
 | 홈 | `index.html` | 도트 로고 히어로 + **센터 소개 · 연구 범위** 2단 요약 |
-| 연구·활동·뉴스 | `archive.html` | 연구 프로젝트 · 활동 · 성과를 **연도별로 모은 기록** (필터 · 검색 · 더 보기) |
+| 연구·활동·뉴스 | `archive.html` | 연구 프로젝트 · 활동을 **연도별로 모은 기록** (필터 · 검색 · 더 보기) |
+| 연구 성과 | `publications.html` | **논문 / 특허** 탭. 디자인권은 특허 안에 포함 |
 | 센터 소개 | `about.html` | 설립 배경, 연구 범위, 연락처 |
-| 구성원 | `people.html` | 연구소장 · 연구원 · 행정 · 협력 연구진 · 졸업생 |
+| 구성원 | `people.html` | 연구소장 · 연구원 · 행정 · 협력 연구진 · Alumni |
 | 상세 | `entry.html` | 개별 기록. `?type=project&id=…` / `?type=activity&id=…` |
 
-`archive.html#research`, `archive.html#activities` 로 들어가면 해당 분류가 걸린 채 열립니다.
+`archive.html#research`, `archive.html#activities`, `publications.html#patent` 처럼
+해시를 붙이면 해당 분류가 걸린 채 열립니다.
 
 > ⚠️ **CSS·JS를 고쳤는데 화면이 안 바뀌면** 브라우저 캐시입니다.
 > `Ctrl+Shift+R` 로 강력 새로고침하거나, HTML 안의 `?v=3` 숫자를 올리세요.
