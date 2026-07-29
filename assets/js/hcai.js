@@ -69,7 +69,8 @@
     resultCount:  { ko: "건", en: "entries" },
     loadMore:     { ko: "더 보기", en: "Show more" },
     showingOf:    { ko: "중", en: "of" },
-    viewFull:     { ko: "원본 이미지 열기", en: "Open full image" }
+    viewFull:     { ko: "원본 보기", en: "View full size" },
+    poster:       { ko: "포스터", en: "Poster" }
   };
 
   /* ---------- 유틸 ------------------------------------------------------- */
@@ -932,6 +933,20 @@
       ? '<div class="wrap section--tight"><img class="detail__cover" src="' + esc(it.cover) + '" alt="" loading="lazy"></div>'
       : "";
 
+    // 포스터가 있으면 본문과 나란히 두 열로 세웁니다.
+    // 포스터는 스크롤을 따라오게 붙여 두어 프로그램을 읽으면서 계속 볼 수 있습니다.
+    var proseHtml = '<div class="prose">' + renderBody(it.body) + "</div>";
+    var bodyHtml = it.poster
+      ? '<div class="entrybody">' + proseHtml +
+          '<figure class="entrybody__poster">' +
+            '<a href="' + esc(it.poster) + '" target="_blank" rel="noopener noreferrer" title="' + esc(t(UI.viewFull)) + '">' +
+              '<img src="' + esc(it.poster) + '" alt="' + esc(t(it.title)) + " " + esc(t(UI.poster)) + '" loading="lazy">' +
+            "</a>" +
+            '<figcaption>' + esc(t(UI.poster)) + " · " + esc(t(UI.viewFull)) + " ↗</figcaption>" +
+          "</figure>" +
+        "</div>"
+      : proseHtml;
+
     host.innerHTML =
       '<div class="wrap detail__head">' +
         '<a class="backlink" href="' + backHref + '">← ' + esc(t(UI.backTo)) + "</a>" +
@@ -941,7 +956,7 @@
       "</div>" +
       coverHtml +
       '<div class="wrap section">' +
-        '<div class="prose">' + renderBody(it.body) + "</div>" +
+        bodyHtml +
         rolesHtml + galleryHtml + pubsHtml + linksHtml +
       "</div>" +
       pagerHtml;
