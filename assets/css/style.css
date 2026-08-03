@@ -230,21 +230,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .nav__link[aria-current="page"] { color: var(--fg); }
 .nav__link[aria-current="page"]::after { transform: scaleX(1); background: var(--accent); }
 
-/* 언어 토글 */
-.langtoggle {
-  display: flex; align-items: center;
-  border: 1px solid var(--line); border-radius: 999px;
-  padding: 2px; margin-left: 0.25rem;
-}
-.langtoggle button {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem; letter-spacing: 0.08em;
-  padding: 0.25rem 0.5rem; border-radius: 999px;
-  color: var(--fg-dim);
-  transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
-}
-.langtoggle button[aria-pressed="true"] { color: var(--bg); background: var(--fg); }
-
 /* 모바일 메뉴 */
 .navtoggle { display: none; }
 @media (max-width: 860px) {
@@ -265,7 +250,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .nav[data-open="true"] { transform: translateY(0); opacity: 1; pointer-events: auto; }
   .nav__link { font-size: 1.125rem; padding-block: 0.875rem; border-bottom: 1px solid var(--line); }
   .nav__link::after { display: none; }
-  .langtoggle { align-self: flex-start; margin-top: 1rem; margin-left: 0; }
 }
 
 
@@ -1025,7 +1009,7 @@ input.chip { outline-offset: 2px; }
 
    ※ 아래 요소들은 KO 모드에서도 모노를 유지합니다 (내용이 영문/숫자이므로):
       .eyebrow · .sechead__title small · .index__date
-      .yeargroup__year · .yeargroup__count · .tag · .langtoggle
+      .yeargroup__year · .yeargroup__count · .tag
    ---------------------------------------------------------------------- */
 
 html:lang(ko) .hero__eyebrow,
@@ -1048,7 +1032,7 @@ html:lang(ko) .empty {
 
 /* 인쇄 */
 @media print {
-  .header, .footer__bottom, .navtoggle, .langtoggle, .filters { display: none; }
+  .header, .footer__bottom, .navtoggle, .filters { display: none; }
   body { background: #fff; color: #000; }
   .hero::before { display: none; }
 }

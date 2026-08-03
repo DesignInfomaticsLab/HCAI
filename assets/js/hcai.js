@@ -15,14 +15,10 @@
 
   /* ---------- 상태 ------------------------------------------------------ */
 
-  var LANGS = ["ko", "en"];
-  var lang = (function () {
-    try {
-      var saved = localStorage.getItem("hcai-lang");
-      if (LANGS.indexOf(saved) > -1) return saved;
-    } catch (e) {}
-    return (navigator.language || "ko").toLowerCase().indexOf("ko") === 0 ? "ko" : "en";
-  })();
+  // 사이트는 한국어만 노출합니다.
+  // content/*.json 의 en 값은 지우지 않고 남겨 두었습니다. 나중에 영문 페이지가
+  // 필요해지면 이 값을 전환하는 로직만 되살리면 그대로 동작합니다.
+  var lang = "ko";
 
   var data = {};
   var pageName = "";
@@ -218,10 +214,6 @@
       return '<a class="nav__link" href="' + esc(item.href) + '"' + current + '>' + esc(t(item.label)) + "</a>";
     }).join("");
 
-    var langHtml = LANGS.map(function (L) {
-      return '<button type="button" data-lang="' + L + '" aria-pressed="' + (L === lang) + '">' + L.toUpperCase() + "</button>";
-    }).join("");
-
     var host = el("#site-header");
     if (!host) return;
 
@@ -234,16 +226,10 @@
         "</a>" +
         '<button class="navtoggle" type="button" aria-expanded="false" aria-controls="site-nav">' +
           "<span>" + esc(t(UI.menu)) + "</span></button>" +
-        '<nav class="nav" id="site-nav" aria-label="Main">' + navHtml +
-          '<div class="langtoggle" role="group" aria-label="Language">' + langHtml + "</div>" +
-        "</nav>" +
+        '<nav class="nav" id="site-nav" aria-label="Main">' + navHtml + "</nav>" +
       "</div>";
 
     mountLogo("brand", "brand-logo", { static: true, compact: true });
-
-    els("[data-lang]", host).forEach(function (btn) {
-      btn.addEventListener("click", function () { setLang(btn.getAttribute("data-lang")); });
-    });
 
     var toggle = el(".navtoggle", host), nav = el("#site-nav", host);
     if (toggle && nav) {
@@ -302,14 +288,6 @@
       "</div>";
 
     mountLogo("footer", "footer-logo", { interactive: false, compact: true });
-  }
-
-  function setLang(next) {
-    if (LANGS.indexOf(next) < 0 || next === lang) return;
-    lang = next;
-    try { localStorage.setItem("hcai-lang", lang); } catch (e) {}
-    document.documentElement.lang = lang;
-    render();
   }
 
   /* ---------- 조각 렌더러 ------------------------------------------------- */
@@ -1076,5 +1054,5 @@
       });
   }
 
-  window.HCAI = { init: init, t: t, setLang: setLang };
+  window.HCAI = { init: init, t: t };
 })();
