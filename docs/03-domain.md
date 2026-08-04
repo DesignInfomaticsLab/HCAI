@@ -119,6 +119,13 @@ CNAME을 쓸 수 없어서 **A 레코드 4개**를 넣습니다. (IPv6까지 하
 - [ ] 3. Cargo 사이트의 사진·문서 중 필요한 것을 모두 내려받아 `assets/img/` 로 옮겼는지 확인
 - [ ] 4. 도메인 DNS를 GitHub으로 변경 (또는 학교에 CNAME 변경 요청)
 - [ ] 5. 새 주소로 정상 접속 + HTTPS 자물쇠 확인
+- [ ] 5-1. **`index.html` 의 `og:image` 를 절대 주소로 바꾸기**
+      카카오톡·슬랙 등에 링크를 붙였을 때 미리보기 이미지가 뜨게 하려면
+      상대 경로가 아니라 전체 주소여야 합니다.
+      ```html
+      <meta property="og:image" content="https://내도메인/assets/img/og.png">
+      <meta property="og:url"   content="https://내도메인/">
+      ```
 - [ ] 6. **최소 한 달은 Cargo 구독을 유지**하다가 문제가 없으면 해지
 - [ ] 7. Google Search Console에 새 사이트 등록 (검색 노출용)
 
