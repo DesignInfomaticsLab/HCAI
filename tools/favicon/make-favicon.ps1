@@ -11,9 +11,9 @@ param([string]$OutDir = ".")
 Add-Type -AssemblyName System.Drawing
 
 $BLUE = [System.Drawing.ColorTranslator]::FromHtml("#0000FE")  # 순수 파랑
-$FONT = "Pretendard ExtraBold"
+$FONT = "Pretendard Black"
 $WORD = "HCAI"
-$FILL = 0.64     # 대각선 길이 대비 글자가 차지할 비율 (올리면 글자가 모서리에서 잘립니다)
+$FILL = 0.72     # 대각선 길이 대비 글자가 차지할 비율 (올리면 글자가 모서리에서 잘립니다)
 $TILT = 45       # 기울기(도). 좌상단 -> 우하단
 
 function New-Favicon([int]$px, [string]$file) {
