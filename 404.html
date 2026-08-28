@@ -4,21 +4,60 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>페이지를 찾을 수 없습니다 — 인간-중심 AI디자인 연구센터</title>
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png?v=8">
-<link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16.png?v=8">
-<link rel="apple-touch-icon" href="/assets/img/favicon-180.png?v=8">
-<link rel="icon" type="image/png" sizes="512x512" href="/assets/img/favicon-512.png?v=8">
+
+<!--
+  이 페이지는 존재하지 않는 모든 주소에 대해 뜹니다. 요청 경로가 /a/b/c 처럼
+  깊을 수도 있어서, 상대경로로 CSS·이미지를 불러오면 깨집니다.
+  그래서 파비콘과 스타일을 밖에서 불러오지 않고 여기에 직접 넣어 두었습니다.
+-->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=8">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    display: grid; place-content: center; justify-items: center;
+    gap: 1.5rem; padding: 2rem; text-align: center;
+    background: #0E0E10; color: rgba(255,255,255,.92);
+    font-family: "Pretendard Variable", Pretendard, -apple-system, "Segoe UI", sans-serif;
+    word-break: keep-all;
+  }
+  .eyebrow {
+    margin: 0;
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: .75rem; letter-spacing: .16em; text-transform: uppercase;
+    color: rgba(255,255,255,.38);
+  }
+  h1 {
+    margin: 0; font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 600; letter-spacing: -.03em; line-height: 1.3;
+  }
+  h1 span {
+    display: block; margin-top: .5rem;
+    font-weight: 400; font-size: .7em; color: rgba(255,255,255,.38);
+  }
+  a {
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: .75rem; letter-spacing: .1em; text-transform: uppercase;
+    color: rgba(255,255,255,.60); text-decoration: none;
+    transition: color 280ms cubic-bezier(.22,.61,.36,1);
+  }
+  a:hover { color: #6BA4FF; }
+</style>
 </head>
 
 <body>
-<main id="main">
-  <div class="wrap" style="min-height:100vh;display:grid;place-content:center;text-align:center;gap:1.5rem">
-    <p class="eyebrow">Error 404</p>
-    <h1 style="font-size:var(--fs-h1)">페이지를 찾을 수 없습니다<br><span class="dim" style="font-weight:400">Page not found</span></h1>
-    <p><a class="backlink" href="/">← 홈으로 / Back to home</a></p>
-  </div>
-</main>
+  <p class="eyebrow">Error 404</p>
+  <h1>페이지를 찾을 수 없습니다<span>Page not found</span></h1>
+  <p><a id="home" href="/">← 홈으로 / Back to home</a></p>
+
+<script>
+  // 지금은 GitHub Pages 프로젝트 페이지라 /HCAI/ 아래에서 열리고,
+  // 나중에 도메인을 붙이면 최상위(/)에서 열립니다. 양쪽 모두에서 홈으로 가도록 처리.
+  (function () {
+    var base = "/HCAI/";
+    document.getElementById("home").href =
+      location.pathname.indexOf(base) === 0 ? base : "/";
+  })();
+</script>
 </body>
 </html>
